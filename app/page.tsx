@@ -10,7 +10,6 @@ export default function HomePage() {
     <div>
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-hero-pattern">
-        <div className="absolute inset-0 bg-[url('/media/pattern.svg')] opacity-10"></div>
         <div className="container relative py-24 md:py-32 lg:py-40">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="h1 text-white mb-6 animate-fade-in">

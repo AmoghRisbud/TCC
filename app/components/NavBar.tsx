@@ -23,7 +23,7 @@ export default function NavBar() {
         <Link 
           href="/" 
           className="font-bold text-2xl gradient-text hover:opacity-80 transition-opacity"
-          aria-label="TCC Home"
+          aria-label="The Collective Counsel Home"
         >
           TCC
         </Link>
