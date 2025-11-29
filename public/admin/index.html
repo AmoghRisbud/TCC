@@ -1,1 +1,110 @@
-<!doctype html><html><head><meta charset=utf-8 /><title>TCC CMS</title></head><body><script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Admin | The Collective Counsel</title>
+  <style>
+    /* Loading and error states */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8fafc;
+    }
+    .loading-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #1e3a5f;
+    }
+    .loading-screen h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid #e2e8f0;
+      border-top-color: #1e3a5f;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .error-message {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin: 1rem;
+      max-width: 600px;
+    }
+    .auth-info {
+      background: #eff6ff;
+      color: #1e40af;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin: 1rem;
+      max-width: 600px;
+      font-size: 0.875rem;
+    }
+    .auth-info a {
+      color: #1e3a5f;
+      text-decoration: underline;
+    }
+    noscript .error-message {
+      text-align: center;
+      margin: 2rem auto;
+    }
+  </style>
+  <!-- Netlify Identity Widget for Authentication -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+  <!-- Loading Screen (shown while CMS loads) -->
+  <div id="loading-screen" class="loading-screen">
+    <h1>TCC Admin</h1>
+    <div class="loading-spinner"></div>
+    <p>Loading content management system...</p>
+  </div>
+
+  <!-- No JavaScript Fallback -->
+  <noscript>
+    <div class="error-message">
+      <strong>JavaScript Required</strong>
+      <p>Please enable JavaScript to use the admin interface.</p>
+    </div>
+  </noscript>
+
+  <!-- Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+  <script>
+    // Hide loading screen once CMS is loaded
+    if (typeof CMS !== 'undefined') {
+      document.getElementById('loading-screen').style.display = 'none';
+    }
+
+    // Redirect to home after login via Netlify Identity
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', function(user) {
+        if (!user) {
+          window.netlifyIdentity.on('login', function() {
+            document.location.href = '/admin/';
+          });
+        }
+      });
+    }
+
+    // Custom error handling
+    window.addEventListener('error', function(event) {
+      console.error('Admin CMS Error:', event.error);
+    });
+  </script>
+</body>
+</html>

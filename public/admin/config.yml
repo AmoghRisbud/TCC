@@ -1,114 +1,224 @@
+# TCC Admin Configuration
+# Authentication: This CMS uses Git Gateway backend for authentication.
+# For Netlify deployments: Enable Netlify Identity + Git Gateway in your Netlify settings.
+# For local development: Use the test backend or configure local_backend in development.
+# Only authorized users with admin privileges can access this page.
+
 backend:
   name: git-gateway
   branch: main
+
+# Local backend for development (uncomment to test locally)
+# local_backend: true
+
 media_folder: "public/media"
 public_folder: "/media"
 publish_mode: editorial_workflow
+logo_url: "/media/tcc-logo.png"
+site_url: "https://thecollectivecounsel.org"
+display_url: "https://thecollectivecounsel.org"
+
+# Slug configuration for URL-friendly filenames
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
 collections:
+  # Programs Collection - Manage educational programs
   - name: programs
     label: Programs
+    label_singular: Program
+    description: "Manage TCC educational programs and courses"
     folder: content/programs
     create: true
+    delete: true
     slug: "{{slug}}"
+    summary: "{{title}} - {{category}}"
+    sortable_fields: ["title", "startDate", "featured"]
+    view_groups:
+      - label: "Status"
+        field: status
+      - label: "Category"
+        field: category
     fields:
-      - { name: title, label: Title }
-      - { name: shortDescription, label: Short Description }
-      - { name: fullDescription, label: Full Description, widget: text }
-      - { name: category, label: Category, required: false }
-      - { name: startDate, label: Start Date, widget: date, required: false }
-      - { name: endDate, label: End Date, widget: date, required: false }
-      - { name: location, label: Location, required: false }
-      - { name: mode, label: Mode, required: false }
-      - { name: ctaLabel, label: CTA Label, required: false }
-      - { name: ctaUrl, label: CTA URL, required: false }
-      - { name: featured, label: Featured, widget: boolean, required: false }
-      - { name: status, label: Status, required: false }
+      - { name: title, label: Title, widget: string, hint: "Program title displayed on the website" }
+      - { name: shortDescription, label: Short Description, widget: string, hint: "Brief description for program cards (max 150 chars)" }
+      - { name: fullDescription, label: Full Description, widget: markdown, required: false, hint: "Detailed program description with formatting support" }
+      - { name: category, label: Category, widget: select, required: false, options: ["Engagement", "Training", "Workshop", "Mentorship", "Certification"], hint: "Program category for filtering" }
+      - { name: startDate, label: Start Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { name: endDate, label: End Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { name: location, label: Location, widget: string, required: false, hint: "Physical location or 'Remote'" }
+      - { name: mode, label: Mode, widget: select, required: false, options: ["online", "offline", "hybrid"], hint: "Delivery mode" }
+      - { name: ctaLabel, label: CTA Button Label, widget: string, required: false, default: "Learn More" }
+      - { name: ctaUrl, label: CTA URL, widget: string, required: false, hint: "Link for the call-to-action button" }
+      - { name: thumbnail, label: Thumbnail Image, widget: image, required: false, hint: "Program thumbnail image" }
+      - { name: brochureUrl, label: Brochure URL, widget: file, required: false, hint: "PDF brochure for download" }
+      - { name: tags, label: Tags, widget: list, required: false, hint: "Comma-separated tags for filtering" }
+      - { name: featured, label: Featured, widget: boolean, default: false, hint: "Show on homepage" }
+      - { name: status, label: Status, widget: select, default: "draft", options: ["draft", "upcoming", "active", "completed", "archived"] }
       - label: Sessions
         name: sessions
         widget: list
         required: false
+        summary: "{{fields.title}} - {{fields.date}}"
         fields:
-          - { name: title, label: Title }
-          - { name: date, label: Date }
+          - { name: title, label: Session Title, widget: string }
+          - { name: date, label: Session Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false }
+          - { name: speakers, label: Speakers, widget: list, required: false }
+
+  # Projects Collection - Showcase TCC projects
   - name: projects
     label: Projects
+    label_singular: Project
+    description: "Manage TCC projects and their impact metrics"
     folder: content/projects
     create: true
+    delete: true
     slug: "{{slug}}"
+    summary: "{{title}} ({{year}})"
+    sortable_fields: ["title", "year"]
     fields:
-      - { name: title, label: Title }
-      - { name: summary, label: Summary }
-      - { name: description, label: Description, widget: text, required: false }
-      - { name: year, label: Year, required: false }
+      - { name: title, label: Title, widget: string }
+      - { name: summary, label: Summary, widget: string, hint: "Brief project summary for cards" }
+      - { name: description, label: Description, widget: markdown, required: false, hint: "Detailed project description" }
+      - { name: year, label: Year, widget: string, required: false }
+      - { name: client, label: Client/Partner, widget: string, required: false }
+      - { name: thumbnail, label: Thumbnail Image, widget: image, required: false }
+      - { name: tags, label: Tags, widget: list, required: false }
       - label: Impact Metrics
         name: impactMetrics
         widget: list
         required: false
+        summary: "{{fields.label}}: {{fields.value}}"
         fields:
-          - { name: label, label: Label }
-          - { name: value, label: Value }
+          - { name: label, label: Metric Label, widget: string }
+          - { name: value, label: Metric Value, widget: string }
+
+  # Testimonials/Reviews Collection - Manage feedback and reviews
   - name: testimonials
-    label: Testimonials
+    label: "Testimonials & Reviews"
+    label_singular: Testimonial
+    description: "Manage community feedback and reviews displayed on the website"
     folder: content/testimonials
     create: true
+    delete: true
     slug: "{{slug}}"
+    summary: "{{name}} - {{role}}"
+    sortable_fields: ["name", "date", "featured", "rating"]
+    view_filters:
+      - label: "Featured"
+        field: featured
+        pattern: true
     fields:
-      - { name: name, label: Name }
-      - { name: role, label: Role, required: false }
-      - { name: quote, label: Quote }
-      - { name: featured, label: Featured, widget: boolean, required: false }
+      - { name: name, label: Name, widget: string, hint: "Full name of the person giving feedback" }
+      - { name: role, label: Role, widget: string, required: false, hint: "e.g., Law Student, Legal Professional" }
+      - { name: organization, label: Organization, widget: string, required: false, hint: "University or company name" }
+      - { name: quote, label: Quote/Review, widget: text, hint: "The testimonial or review text" }
+      - { name: rating, label: Rating (1-5), widget: number, required: false, value_type: "int", min: 1, max: 5, hint: "Star rating from 1 to 5" }
+      - { name: photo, label: Photo, widget: image, required: false, hint: "Profile photo of the reviewer" }
+      - { name: programRef, label: Related Program, widget: relation, collection: "programs", search_fields: ["title"], value_field: "{{slug}}", display_fields: ["title"], required: false, hint: "Link to a related program" }
+      - { name: date, label: Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { name: featured, label: Featured, widget: boolean, default: false, hint: "Show on homepage" }
+
+  # Team Collection - Manage team members
   - name: team
     label: Team
+    label_singular: Team Member
+    description: "Manage TCC team members and educators"
     folder: content/team
     create: true
+    delete: true
     slug: "{{slug}}"
+    summary: "{{name}} - {{title}}"
+    sortable_fields: ["name", "order", "category"]
+    view_groups:
+      - label: "Category"
+        field: category
+      - label: "Active Status"
+        field: active
     fields:
-      - { name: name, label: Name }
-      - { name: title, label: Title }
-      - { name: bio, label: Bio, widget: text, required: false }
-      - { name: active, label: Active, widget: boolean, required: false }
+      - { name: name, label: Name, widget: string }
+      - { name: title, label: Title/Role, widget: string, required: false }
+      - { name: bio, label: Bio, widget: markdown, required: false, hint: "Short biography with formatting support" }
+      - { name: photo, label: Photo, widget: image, required: false }
+      - { name: email, label: Email, widget: string, required: false, pattern: ['^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', "Must be a valid email address"] }
+      - { name: linkedin, label: LinkedIn URL, widget: string, required: false }
+      - { name: order, label: Display Order, widget: number, required: false, value_type: "int", min: 0, hint: "Lower numbers appear first" }
+      - { name: category, label: Category, widget: select, required: false, options: ["Leadership", "Educator", "Advisor", "Volunteer"] }
+      - { name: active, label: Active, widget: boolean, default: true, hint: "Uncheck to hide from website" }
+
+  # Jobs Collection - Manage career opportunities
   - name: jobs
-    label: Jobs
+    label: Jobs & Careers
+    label_singular: Job
+    description: "Manage job postings and career opportunities"
     folder: content/jobs
     create: true
+    delete: true
     slug: "{{slug}}"
+    summary: "{{title}} - {{department}} ({{status}})"
+    sortable_fields: ["title", "closingDate", "status"]
+    view_groups:
+      - label: "Status"
+        field: status
+      - label: "Department"
+        field: department
     fields:
-      - { name: title, label: Title }
-      - { name: department, label: Department, required: false }
-      - { name: location, label: Location, required: false }
-      - { name: type, label: Type, required: false }
-      - { name: description, label: Description, widget: text, required: false }
+      - { name: title, label: Job Title, widget: string }
+      - { name: department, label: Department, widget: select, required: false, options: ["Outreach", "Education", "Operations", "Technology", "Marketing", "Legal"] }
+      - { name: location, label: Location, widget: string, required: false, default: "Remote" }
+      - { name: type, label: Employment Type, widget: select, required: false, options: ["Full-time", "Part-time", "Internship", "Contract", "Volunteer"] }
+      - { name: description, label: Description, widget: markdown, required: false }
       - label: Requirements
         name: requirements
         widget: list
         required: false
-        field: { name: item, label: Item }
+        field: { name: item, label: Requirement, widget: string }
       - label: Responsibilities
         name: responsibilities
         widget: list
         required: false
-        field: { name: item, label: Item }
-      - { name: applyEmail, label: Apply Email, required: false }
-      - { name: status, label: Status, required: false }
+        field: { name: item, label: Responsibility, widget: string }
+      - { name: salaryRange, label: Salary Range, widget: string, required: false, hint: "e.g., $50,000 - $70,000" }
+      - { name: applyEmail, label: Apply via Email, widget: string, required: false }
+      - { name: applyUrl, label: Apply URL, widget: string, required: false, hint: "External application link" }
+      - { name: closingDate, label: Closing Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { name: status, label: Status, widget: select, default: "open", options: ["draft", "open", "closed", "filled"] }
+
+  # Gallery Collection - Manage media gallery
   - name: gallery
     label: Gallery
+    label_singular: Gallery Item
+    description: "Manage photos and media for the gallery"
     folder: content/gallery
     create: true
+    delete: true
     slug: "{{slug}}"
+    summary: "{{title}} - {{album}}"
+    sortable_fields: ["title", "date", "album"]
+    view_groups:
+      - label: "Album"
+        field: album
     fields:
-      - { name: title, label: Title }
-      - { name: description, label: Description, required: false }
-      - { name: image, label: Image, widget: image }
-      - { name: altText, label: Alt Text }
-      - { name: album, label: Album, required: false }
-      - { name: date, label: Date, widget: date, required: false }
+      - { name: title, label: Title, widget: string }
+      - { name: description, label: Description, widget: text, required: false }
+      - { name: image, label: Image, widget: image, hint: "Upload or select an image" }
+      - { name: altText, label: Alt Text, widget: string, hint: "Accessibility description for the image" }
+      - { name: album, label: Album, widget: select, required: false, options: ["events", "workshops", "community", "team", "general"] }
+      - { name: tags, label: Tags, widget: list, required: false }
+      - { name: date, label: Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { name: attribution, label: Attribution, widget: string, required: false, hint: "Photo credit or source" }
+
+  # Site Settings - Global site configuration
   - name: settings
-    label: Settings
+    label: Site Settings
+    description: "Configure global site settings"
     files:
-      - label: Site Settings
+      - label: General Settings
         name: site
         file: content/settings/site.md
         fields:
-          - { name: siteName, label: Site Name }
-          - { name: heroCopy, label: Hero Copy, widget: text, required: false }
-          - { name: heroImage, label: Hero Image, widget: image, required: false }
+          - { name: siteName, label: Site Name, widget: string, default: "The Collective Counsel" }
+          - { name: heroCopy, label: Hero Tagline, widget: text, required: false, hint: "Main tagline displayed on homepage" }
+          - { name: heroImage, label: Hero Background Image, widget: image, required: false }
