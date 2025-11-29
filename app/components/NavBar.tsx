@@ -11,7 +11,8 @@ const links = [
   { href: '/community', label: 'Community' },
   { href: '/media', label: 'Media' },
   { href: '/careers', label: 'Careers' },
-  { href: '/contact', label: 'Contact' }
+  { href: '/contact', label: 'Contact' },
+  { href: '/admin', label: 'Admin' }
 ];
 
 export default function NavBar() {

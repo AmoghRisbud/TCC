@@ -6,7 +6,8 @@ const quickLinks = [
   { href: '/programs', label: 'Programs' },
   { href: '/community', label: 'Community' },
   { href: '/careers', label: 'Careers' },
-  { href: '/contact', label: 'Contact' }
+  { href: '/contact', label: 'Contact' },
+  { href: '/admin', label: 'Admin' }
 ];
 
 const socialLinks = [
