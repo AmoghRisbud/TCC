@@ -5,10 +5,10 @@ import { getPrograms, getTestimonials } from '../lib/content';
 export default function HomePage() {
   const programs = getPrograms().slice(0, 2);
   const allTestimonials = getTestimonials();
-  const featuredTestimonials = allTestimonials.filter(t => t.featured);
-  const testimonials = featuredTestimonials.length > 0 
-    ? featuredTestimonials.slice(0, 3) 
-    : allTestimonials.slice(0, 3);
+  // Prioritize featured testimonials, fall back to first 3 if none are featured
+  const testimonials = allTestimonials
+    .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
+    .slice(0, 3);
   
   return (
     <div>
