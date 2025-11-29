@@ -1,0 +1,39 @@
+WIREFRAME DOCUMENT – THE COLLECTIVE COUNSEL (TCC) LANDING PAGE
+ 1. HOME (HERO SECTION)- Header (Top Navigation):
+ • Logo (TCC)
+ • Menu: Home | About | Programs | Projects | Community | Media | Careers | Contact- Hero Banner:
+ • Punchline: “Helping Law Students Find Clarity, Skills & Direction.”
+ • Sub-text: “Join a community-led legal education ecosystem.”
+ • CTA Button 1: Join the Community
+ • CTA Button 2: Explore Programs
+ • Background: Clean graphic/static image.
+ 2. ABOUT SECTION- Title: “Who We Are”- Text: Brief mission + the problem + what CC solves.- Sub-sections:
+ • Vision
+ • Mission
+ • Approach (Mentorship + Courses + Community Model)- CTA: Know More About CC
+ 3. PAST PROJECTS SECTION- Title: “Our Proof of Concept”- Subsections (each displayed as a card):
+ • Legal SkillBar Project – Summary + Impact Numbers
+ • Other Micro-initiatives (if any)- CTA: See Full Project Report (PDF upload option developer must enable)
+ 4. PROGRAMS SECTION- Title: “Programs You Can Join”- Cards:
+ • Campus Ambassador Program – Description + Enroll button
+ • Educator Program – Description + Apply button- CTA: Explore More
+ 5. COMMUNITY SECTION- Title: “Join the Community”- Sub-text: WhatsApp, Discord or email-based community.- CTA: Join the Community (direct link)
+ 6. MEDIA GALLERY
+- Title: “In Pictures”- Grid:
+ • Photos from events, workshops, student testimonials, project snapshots.
+ 7. TESTIMONIALS- Three blocks:
+ • Student Testimonials (carousel style)
+ • Educator Testimonials
+ • Partner Testimonials- Each has name, photo, designation, 3-line feedback.
+ 8. TEAM / EDUCATORS PROFILES- Title: “Meet the Educators”- Each educator card:
+ • Photo
+ • Name
+ • Designation
+ • “Work With Us” CTA
+ 9. CAREERS- Title: “Work With TCC”- Text: “Currently, no open roles. But we love hearing from passionate people.”- CTA: “Send your CV to info.thecollectivecounsel@gmail.com”- Developer Note: Add job listing structure so admin can add live vacancies later.
+ 10. FOOTER- Quick Links: Home | About | Programs | Community | Careers | Contact- Email: info.thecollectivecounsel@gmail.com- Social Media Icons (LinkedIn, Instagram)- Copyright text.
+ DEVELOPER NOTES (MUST IMPLEMENT)- Mobile-first responsive layout.- CMS backend for:
+ • Adding programs
+ • Adding testimonials
+ • Adding pictures
+ • Adding jobs- Fast load time, compressed media.- SEO-ready (meta title, description, alt-tags).

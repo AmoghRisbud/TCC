@@ -1,0 +1,114 @@
+backend:
+  name: git-gateway
+  branch: main
+media_folder: "public/media"
+public_folder: "/media"
+publish_mode: editorial_workflow
+collections:
+  - name: programs
+    label: Programs
+    folder: content/programs
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title }
+      - { name: shortDescription, label: Short Description }
+      - { name: fullDescription, label: Full Description, widget: text }
+      - { name: category, label: Category, required: false }
+      - { name: startDate, label: Start Date, widget: date, required: false }
+      - { name: endDate, label: End Date, widget: date, required: false }
+      - { name: location, label: Location, required: false }
+      - { name: mode, label: Mode, required: false }
+      - { name: ctaLabel, label: CTA Label, required: false }
+      - { name: ctaUrl, label: CTA URL, required: false }
+      - { name: featured, label: Featured, widget: boolean, required: false }
+      - { name: status, label: Status, required: false }
+      - label: Sessions
+        name: sessions
+        widget: list
+        required: false
+        fields:
+          - { name: title, label: Title }
+          - { name: date, label: Date }
+  - name: projects
+    label: Projects
+    folder: content/projects
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title }
+      - { name: summary, label: Summary }
+      - { name: description, label: Description, widget: text, required: false }
+      - { name: year, label: Year, required: false }
+      - label: Impact Metrics
+        name: impactMetrics
+        widget: list
+        required: false
+        fields:
+          - { name: label, label: Label }
+          - { name: value, label: Value }
+  - name: testimonials
+    label: Testimonials
+    folder: content/testimonials
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: name, label: Name }
+      - { name: role, label: Role, required: false }
+      - { name: quote, label: Quote }
+      - { name: featured, label: Featured, widget: boolean, required: false }
+  - name: team
+    label: Team
+    folder: content/team
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: name, label: Name }
+      - { name: title, label: Title }
+      - { name: bio, label: Bio, widget: text, required: false }
+      - { name: active, label: Active, widget: boolean, required: false }
+  - name: jobs
+    label: Jobs
+    folder: content/jobs
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title }
+      - { name: department, label: Department, required: false }
+      - { name: location, label: Location, required: false }
+      - { name: type, label: Type, required: false }
+      - { name: description, label: Description, widget: text, required: false }
+      - label: Requirements
+        name: requirements
+        widget: list
+        required: false
+        field: { name: item, label: Item }
+      - label: Responsibilities
+        name: responsibilities
+        widget: list
+        required: false
+        field: { name: item, label: Item }
+      - { name: applyEmail, label: Apply Email, required: false }
+      - { name: status, label: Status, required: false }
+  - name: gallery
+    label: Gallery
+    folder: content/gallery
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: Title }
+      - { name: description, label: Description, required: false }
+      - { name: image, label: Image, widget: image }
+      - { name: altText, label: Alt Text }
+      - { name: album, label: Album, required: false }
+      - { name: date, label: Date, widget: date, required: false }
+  - name: settings
+    label: Settings
+    files:
+      - label: Site Settings
+        name: site
+        file: content/settings/site.md
+        fields:
+          - { name: siteName, label: Site Name }
+          - { name: heroCopy, label: Hero Copy, widget: text, required: false }
+          - { name: heroImage, label: Hero Image, widget: image, required: false }
