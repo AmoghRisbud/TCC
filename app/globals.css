@@ -51,3 +51,20 @@ body { @apply bg-brand-light text-brand-dark font-sans antialiased; }
 a:focus-visible, button:focus-visible {
   @apply outline-none ring-2 ring-brand-primary ring-offset-2 rounded;
 }
+
+:root {
+  --brand-green-dark: #0B3D2E;
+  --brand-green: #0F5132;
+  --brand-gold: #E6B65C;
+  --brand-gold-soft: #F3D27A;
+}
+
+.bg-brand-hero {
+  background: linear-gradient(
+    135deg,
+    var(--brand-green-dark) 0%,
+    var(--brand-green) 45%,
+    var(--brand-gold) 100%
+  );
+}
+

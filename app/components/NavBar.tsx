@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import Image from 'next/image';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -21,12 +22,21 @@ export default function NavBar() {
   return (
     <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100">
       <div className="container flex items-center justify-between h-16 md:h-20">
-        <Link 
-          href="/" 
-          className="font-bold text-2xl gradient-text hover:opacity-80 transition-opacity"
+        <Link
+          href="/"
+          className="flex items-center gap-3 hover:opacity-90 transition-opacity"
           aria-label="The Collective Counsel Home"
         >
-          TCC
+          <Image
+            src="/CCLogo.png"
+            alt="The Collective Counsel Logo"
+            width={56}
+            height={56}
+            priority
+          />
+          <span className="font-semibold text-lg md:text-xl text-brand-dark tracking-tight">
+            The Collective Counsel
+          </span>
         </Link>
         
         {/* Desktop Navigation */}

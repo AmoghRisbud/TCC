@@ -10,7 +10,7 @@ export default function AdminProgramsPage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="section bg-gradient-to-br from-brand-primary to-brand-accent text-white">
+      <section className="section bg-brand-hero text-white from-brand-primary to-brand-accent text-white">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
             <nav className="mb-4">

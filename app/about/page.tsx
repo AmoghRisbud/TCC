@@ -38,7 +38,7 @@ export default function AboutPage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="section bg-gradient-to-br from-brand-primary to-brand-accent text-white">
+      <section className="section bg-brand-hero text-white from-brand-primary to-brand-accent text-white">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="h1 mb-6">Who We Are</h1>
