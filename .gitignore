@@ -5,3 +5,8 @@ node_modules
 /dist
 content/**/*.tmp
 tsconfig.tsbuildinfo
+
+# Backend Go binaries
+backend/bin/
+backend/uploads/
+backend/tmp/
