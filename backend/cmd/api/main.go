@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/AmoghRisbud/TCC/backend/internal/auth"
 	"github.com/AmoghRisbud/TCC/backend/internal/config"
@@ -35,10 +36,14 @@ func main() {
 	// Initialize stores
 	userStore := models.NewUserStore(db.DB)
 	courseStore := models.NewCourseStore(db.DB)
+	enrollmentStore := models.NewEnrollmentStore(db.DB)
+	quizStore := models.NewQuizStore(db.DB)
 
 	// Initialize handlers
 	authHandler := handlers.NewAuthHandler(userStore, authService)
 	courseHandler := handlers.NewCourseHandler(courseStore)
+	enrollmentHandler := handlers.NewEnrollmentHandler(enrollmentStore, courseStore)
+	quizHandler := handlers.NewQuizHandler(quizStore)
 
 	// Setup routes
 	mux := http.NewServeMux()
@@ -61,6 +66,12 @@ func main() {
 	// Course management routes
 	protectedMux.HandleFunc("/api/courses/create", courseHandler.CreateCourse)
 	protectedMux.HandleFunc("/api/courses/", func(w http.ResponseWriter, r *http.Request) {
+		// Check if it's an enrollment route
+		if strings.Contains(r.URL.Path, "/enrollments") {
+			enrollmentHandler.ListCourseEnrollments(w, r)
+			return
+		}
+		
 		switch r.Method {
 		case http.MethodGet:
 			courseHandler.GetCourse(w, r)
@@ -69,6 +80,44 @@ func main() {
 		case http.MethodDelete:
 			courseHandler.DeleteCourse(w, r)
 		default:
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	})
+
+	// Enrollment routes
+	protectedMux.HandleFunc("/api/enrollments", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			enrollmentHandler.Enroll(w, r)
+		} else {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	})
+	protectedMux.HandleFunc("/api/enrollments/me", enrollmentHandler.ListMyEnrollments)
+	protectedMux.HandleFunc("/api/enrollments/", enrollmentHandler.GetEnrollment)
+
+	// Quiz routes
+	protectedMux.HandleFunc("/api/quizzes", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			quizHandler.CreateQuiz(w, r)
+		} else {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		}
+	})
+	protectedMux.HandleFunc("/api/quizzes/", func(w http.ResponseWriter, r *http.Request) {
+		if strings.Contains(r.URL.Path, "/attempts") {
+			if strings.HasSuffix(r.URL.Path, "/me") {
+				quizHandler.GetMyAttempts(w, r)
+			} else if strings.Contains(r.URL.Path, "/submit") {
+				quizHandler.SubmitQuizAnswers(w, r)
+			} else {
+				quizHandler.StartQuizAttempt(w, r)
+			}
+			return
+		}
+		
+		if r.Method == http.MethodGet {
+			quizHandler.GetQuiz(w, r)
+		} else {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
 	})
@@ -83,6 +132,10 @@ func main() {
 	finalMux.Handle("/api/courses", mux)
 	finalMux.Handle("/api/auth/me", authMiddleware(protectedMux))
 	finalMux.Handle("/api/courses/", authMiddleware(protectedMux))
+	finalMux.Handle("/api/enrollments", authMiddleware(protectedMux))
+	finalMux.Handle("/api/enrollments/", authMiddleware(protectedMux))
+	finalMux.Handle("/api/quizzes", authMiddleware(protectedMux))
+	finalMux.Handle("/api/quizzes/", authMiddleware(protectedMux))
 
 	// Health check endpoint
 	finalMux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {

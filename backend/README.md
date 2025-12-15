@@ -22,10 +22,17 @@ A Go-based RESTful API for the Learning Management System (LMS) built for The Co
 - [x] Course listing with filtering (by category, level, instructor)
 - [x] Course modules and lessons structure
 
+### Phase 4 - Enrollment & Learning Features ✅
+- [x] Course enrollment system
+- [x] Student enrollment tracking
+- [x] Enrollment listing for students and instructors
+- [x] Quiz/assessment system with auto-grading
+- [x] Multiple choice and true/false questions
+- [x] Quiz attempts with scoring
+- [x] Progress tracking framework
+
 ### Upcoming Features
-- [ ] Course enrollment system
-- [ ] Quiz/assessment system with auto-grading
-- [ ] Progress tracking
+- [ ] Lesson progress tracking implementation
 - [ ] Student and instructor dashboards
 - [ ] Certificate generation
 - [ ] Payment integration
@@ -217,6 +224,95 @@ DELETE /api/courses/1
 Authorization: Bearer <token>
 ```
 
+### Enrollments
+
+#### Enroll in a course (Student only)
+```http
+POST /api/enrollments
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "course_id": 1
+}
+```
+
+#### List my enrollments
+```http
+GET /api/enrollments/me?status=active&limit=20&offset=0
+Authorization: Bearer <token>
+```
+
+#### Get enrollment by ID
+```http
+GET /api/enrollments/1
+Authorization: Bearer <token>
+```
+
+#### List course enrollments (Instructor/Admin only)
+```http
+GET /api/courses/1/enrollments?status=active&limit=50&offset=0
+Authorization: Bearer <token>
+```
+
+### Quizzes
+
+#### Create quiz (Instructor/Admin only)
+```http
+POST /api/quizzes
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "lesson_id": 1,
+  "title": "Module 1 Quiz",
+  "description": "Test your knowledge",
+  "passing_score": 70,
+  "time_limit_minutes": 30,
+  "max_attempts": 3
+}
+```
+
+#### Get quiz
+```http
+GET /api/quizzes/1
+Authorization: Bearer <token>
+```
+
+#### Start quiz attempt
+```http
+POST /api/quizzes/1/attempts
+Authorization: Bearer <token>
+```
+
+Response includes attempt details and quiz questions with options.
+
+#### Submit quiz answers
+```http
+POST /api/quizzes/attempts/1/submit
+Authorization: Bearer <token>
+Content-Type: application/json
+
+[
+  {
+    "question_id": 1,
+    "selected_option_id": 3
+  },
+  {
+    "question_id": 2,
+    "selected_option_id": 7
+  }
+]
+```
+
+Returns the graded attempt with score and pass/fail status.
+
+#### Get my quiz attempts
+```http
+GET /api/quizzes/1/attempts/me
+Authorization: Bearer <token>
+```
+
 ## Database Schema
 
 The database includes the following tables:
@@ -251,14 +347,18 @@ backend/
 │   │   └── database.go          # Database connection and schema
 │   ├── handlers/
 │   │   ├── auth.go              # Authentication handlers
-│   │   └── courses.go           # Course handlers
+│   │   ├── courses.go           # Course handlers
+│   │   ├── enrollments.go       # Enrollment handlers
+│   │   └── quizzes.go           # Quiz handlers
 │   ├── middleware/
 │   │   ├── auth.go              # Auth middleware
 │   │   ├── cors.go              # CORS middleware
 │   │   └── logging.go           # Logging middleware
 │   └── models/
 │       ├── user.go              # User model and store
-│       └── course.go            # Course model and store
+│       ├── course.go            # Course model and store
+│       ├── enrollment.go        # Enrollment model and store
+│       └── quiz.go              # Quiz model and store
 ├── pkg/
 │   ├── errors/                  # Custom error types
 │   └── types/                   # Shared types
