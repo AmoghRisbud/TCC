@@ -6,7 +6,8 @@ const channels = [
   {
     name: 'WhatsApp',
     description: 'Join our WhatsApp group for quick updates and discussions',
-    href: '#',
+    href: 'https://docs.google.com/forms/d/e/1FAIpQLSfvFXAbRwMKmTeuCuAOr2Vz88RBll8cdWR_Cx_5gv-ndXDLrQ/viewform?usp=send_form',
+    external: true,
     color: 'bg-green-500',
     icon: (
       <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -17,7 +18,8 @@ const channels = [
   {
     name: 'Instagram',
     description: 'Follow us on Instagram for some exciting content',
-    href: '#',
+    href: 'https://www.instagram.com/the_collective_counsel?igsh=MTZwY3VyaHN6NWJ1ag==',
+    external: true,
     color: 'bg-indigo-500',
     icon: (
 //       <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -54,7 +56,21 @@ const channels = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
       </svg>
     )
+  },
+
+  {
+    name: 'LinkedIn',
+    description: 'Connect with us professionally on LinkedIn',
+    href: ' https://www.linkedin.com/company/the-collective-counsel/',
+    external: true,
+    color: 'bg-[#0A66C2]',
+    icon: (
+      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zM7.119 20.452H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/>
+      </svg>
+    )
   }
+
 ];
 
 export default function CommunityPage() {
@@ -75,13 +91,16 @@ export default function CommunityPage() {
       {/* Channels */}
       <section className="section bg-brand-light">
         <div className="container max-w-4xl">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {channels.map((channel) => (
               <a
                 key={channel.name}
                 href={channel.href}
+                target={channel.external ? '_blank' : undefined}
+                rel={channel.external ? 'noopener noreferrer' : undefined}
                 className="card-interactive group text-center"
               >
+
                 <div className={`w-16 h-16 mx-auto mb-6 ${channel.color} rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                   {channel.icon}
                 </div>

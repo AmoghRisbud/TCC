@@ -17,7 +17,7 @@ function readMarkdownDir<T>(sub: string, mapFn: (data: any, slug: string) => T):
 }
 
 export const getPrograms = (): Program[] => readMarkdownDir('programs', (d, slug) => ({ slug, ...d }));
-export const getProjects = (): Project[] => readMarkdownDir('projects', (d, slug) => ({ slug, ...d }));
+export const getResearch = (): Project[] => readMarkdownDir('research', (d, slug) => ({ slug, ...d }));
 export const getTestimonials = (): Testimonial[] => readMarkdownDir('testimonials', (d, slug) => ({ id: slug, ...d }));
 export const getTeam = (): TeamMember[] => readMarkdownDir('team', (d, slug) => ({ slug, ...d }));
 export const getJobs = (): Job[] => readMarkdownDir('jobs', (d, slug) => ({ slug, ...d }));

@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import SectionHeading from '../components/SectionHeading';
-import { getProjects } from '../../lib/content';
+import { getResearch } from '../../lib/content';
 
-export const metadata = { title: 'Projects | TCC' };
+export const metadata = { title: 'Research | TCC' };
 
-export default function ProjectsPage() {
-  const projects = getProjects();
+export default function researchPage() {
+  const research = getResearch();
   return (
     <div>
       {/* Hero Section */}
@@ -14,20 +14,20 @@ export default function ProjectsPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="h1 mb-6">Our Proof of Concept</h1>
             <p className="text-xl text-white/80 leading-relaxed">
-              Discover the impact we&apos;ve made through our initiatives and projects.
+              Discover the impact we&apos;ve made through our wide research.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Projects Grid */}
+      {/* research Grid */}
       <section className="section bg-brand-light">
         <div className="container">
           <div className="grid md:grid-cols-2 gap-8">
-            {projects.map(p => (
+            {research.map(p => (
               <Link 
                 key={p.slug} 
-                href={`/projects/${p.slug}`} 
+                href={`/research/${p.slug}`}
                 className="card-interactive group"
               >
                 <div className="flex flex-col h-full">
@@ -66,9 +66,9 @@ export default function ProjectsPage() {
             ))}
           </div>
           
-          {projects.length === 0 && (
+          {research.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-brand-muted text-lg">No projects to display yet. Stay tuned!</p>
+              <p className="text-brand-muted text-lg">No researches to display yet. Stay tuned!</p>
             </div>
           )}
         </div>

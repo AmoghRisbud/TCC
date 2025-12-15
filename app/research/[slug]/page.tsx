@@ -1,12 +1,12 @@
-import { getProjects } from '../../../lib/content';
+import { getResearch } from '../../../lib/content';
 import { notFound } from 'next/navigation';
 
 export function generateStaticParams() {
-  return getProjects().map(p => ({ slug: p.slug }));
+  return getResearch().map(p => ({ slug: p.slug }));
 }
 
 export default function ProjectDetail({ params }: { params: { slug: string } }) {
-  const project = getProjects().find(p => p.slug === params.slug);
+  const project = getResearch().find(p => p.slug === params.slug);
   if (!project) return notFound();
   return (
     <div className="section container max-w-3xl">

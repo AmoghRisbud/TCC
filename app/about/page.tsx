@@ -38,16 +38,31 @@ export default function AboutPage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="section bg-brand-hero text-white from-brand-primary to-brand-accent text-white">
-        <div className="container">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="h1 mb-6">Who We Are</h1>
-            <p className="text-xl text-white/80 leading-relaxed">
-              The Collective Counsel is a community-led legal education ecosystem dedicated to helping law students navigate their journey from academics to a successful legal career.
-            </p>
+      <section className="section relative overflow-hidden text-white">
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center scale-110 blur-md"
+          style={{
+            backgroundImage: "url('/images/media/session1.png')",
+          }}
+        />
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/90 via-brand-primary/70 to-brand-accent/80" />
+
+        {/* Content */}
+        <div className="relative z-10">
+          <div className="container">
+            <div className="max-w-3xl mx-auto text-center">
+              <h1 className="h1 mb-6">Who We Are</h1>
+              <p className="text-xl text-white/85 leading-relaxed">
+                The Collective Counsel is a community-led legal education ecosystem dedicated to helping law students navigate their journey from academics to a successful legal career.
+              </p>
+            </div>
           </div>
         </div>
       </section>
+
 
       {/* Problem & Solution */}
       <section className="section bg-brand-light">

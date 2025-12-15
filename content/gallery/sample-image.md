@@ -1,8 +1,8 @@
 ---
 title: "Workshop Snapshot"
-description: "Students collaborating during a skill-building session."
-image: "/media/workshop1.jpg"
-altText: "Law students at workshop table"
+description: "Mental Health Session 1"
+image: "/images/media/session1.png"
+altText: "Session1"
 album: "events"
 date: "2025-01-10"
 ---

@@ -33,17 +33,38 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-brand-dark text-white mt-16">
-      <div className="container py-12 md:py-16">
+    <footer className="relative mt-20 overflow-hidden
+                       bg-gradient-to-br from-brand-dark via-[#0B3F27] to-brand-dark
+                       text-white">
+
+      {/* Decorative glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2
+                   w-[700px] h-[700px]
+                   bg-brand-secondary/10 blur-3xl rounded-full"
+      />
+
+      <div className="container relative py-14 md:py-16">
         <div className="grid gap-12 md:grid-cols-4">
+
           {/* Brand Section */}
           <div className="md:col-span-2">
             <Link href="/" className="inline-block">
-              <span className="text-2xl font-bold text-white">TCC</span>
+              <span className="text-3xl text-brand-secondary font-extrabold tracking-wide
+                               text-white drop-shadow-sm">
+                The Collective Counsel
+              </span>
+
             </Link>
-            <p className="mt-4 text-gray-400 max-w-md leading-relaxed">
-              The Collective Counsel - A community-led legal education ecosystem helping law students find clarity, skills, and direction.
+
+            <p className="mt-4 max-w-md
+                         text-[15px] leading-relaxed
+                         text-gray-200">
+              The Collective Counsel — a community-led legal education ecosystem
+              helping law students find clarity, skills, and direction.
             </p>
+
             {/* Social Links */}
             <div className="flex gap-4 mt-6">
               {socialLinks.map(link => (
@@ -52,8 +73,12 @@ export default function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 bg-white/10 rounded-lg hover:bg-brand-primary transition-colors duration-200"
                   aria-label={link.label}
+                  className="p-2 rounded-lg
+                             bg-white/10 backdrop-blur-sm
+                             hover:bg-brand-secondary/20
+                             hover:scale-105
+                             transition-all duration-200"
                 >
                   {link.icon}
                 </a>
@@ -63,13 +88,18 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-lg mb-4">Quick Links</h4>
+            <h4 className="mb-4 text-lg font-semibold
+                           tracking-wide text-white">
+              Quick Links
+            </h4>
             <ul className="space-y-3">
               {quickLinks.map(link => (
                 <li key={link.label}>
-                  <Link 
+                  <Link
                     href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors duration-200"
+                    className="text-[15px] text-gray-300
+                               hover:text-brand-secondary
+                               transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -81,28 +111,36 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <h4 className="font-semibold text-lg mb-4">Contact</h4>
-            <div className="space-y-3 text-gray-400">
-              <a 
-                href="mailto:info.thecollectivecounsel@gmail.com"
-                className="block hover:text-white transition-colors duration-200"
-              >
-                info.thecollectivecounsel@gmail.com
-              </a>
-            </div>
+            <a
+              href="mailto:info.thecollectivecounsel@gmail.com"
+              className="block text-[15px] text-gray-300
+                         hover:text-brand-secondary"
+            >
+              info.thecollectivecounsel@gmail.com
+            </a>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-400">
+        <div className="mt-14 pt-8 border-t border-white/10
+                        flex flex-col md:flex-row
+                        justify-between items-center gap-4">
+
+          <p className="text-[13px] tracking-wide text-gray-400">
             © {new Date().getFullYear()} The Collective Counsel. All rights reserved.
           </p>
+
           <div className="flex gap-6 text-sm text-gray-400">
-            <Link href="/about" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/about" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/about" className="text-gray-400 hover:text-brand-secondary">
+              Privacy Policy
+            </Link>
+            <Link href="/about" className="text-gray-400 hover:text-brand-secondary">
+              Terms of Service
+            </Link>
           </div>
         </div>
       </div>
     </footer>
   );
 }
+

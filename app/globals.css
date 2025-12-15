@@ -17,35 +17,72 @@ body { @apply bg-brand-light text-brand-dark font-sans antialiased; }
 .p { @apply leading-relaxed text-brand-muted; }
 
 /* Buttons */
-.btn { 
-  @apply inline-flex items-center justify-center rounded-lg bg-brand-primary text-white px-6 py-3 font-medium 
-  hover:bg-indigo-600 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5
-  focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2;
-}
-.btn-secondary { 
-  @apply inline-flex items-center justify-center rounded-lg bg-white text-brand-primary px-6 py-3 font-medium 
-  border-2 border-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-200
-  focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2;
-}
-.btn-ghost {
-  @apply inline-flex items-center justify-center rounded-lg bg-transparent text-brand-primary px-6 py-3 font-medium 
-  hover:bg-brand-primary/10 transition-all duration-200
-  focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2;
-}
+.btn {
+    @apply inline-flex items-center justify-center rounded-xl px-6 py-3
+           font-semibold tracking-wide
+           bg-brand-secondary text-brand-dark
+           transition-all duration-300 ease-out
+           shadow-md;
+  }
+
+  .btn:hover {
+    @apply bg-brand-accent shadow-xl scale-[1.03];
+  }
+
+  .btn:active {
+    @apply scale-[0.97];
+  }
+
+  /* =========================
+     SECONDARY BUTTON
+     ========================= */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl px-6 py-3
+           font-semibold tracking-wide
+           bg-brand-primary text-white
+           transition-all duration-300
+           shadow-md;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-brand-dark shadow-xl scale-[1.03];
+  }
+
+  /* =========================
+     GHOST / OUTLINE BUTTON
+     ========================= */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-xl px-6 py-3
+           font-semibold tracking-wide
+           text-brand-primary
+           border border-brand-primary/30
+           transition-all duration-300;
+  }
+
+  .btn-ghost:hover {
+    @apply bg-brand-primary text-white border-brand-primary;
+  }
 
 /* Cards */
 .card {
-  @apply bg-white rounded-2xl p-6 shadow-card transition-all duration-300 
-  hover:shadow-card-hover hover:-translate-y-1 border border-gray-100;
-}
-.card-interactive {
-  @apply card cursor-pointer;
-}
+    @apply bg-white rounded-2xl p-6
+           shadow-card
+           transition-all duration-300;
+  }
 
-/* Gradient text */
-.gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary via-brand-accent to-brand-secondary;
-}
+  .card:hover {
+    @apply shadow-card-hover -translate-y-1;
+  }
+
+  .card-interactive {
+    @apply bg-white rounded-2xl p-8
+           shadow-card
+           transition-all duration-300;
+  }
+
+  .card-interactive:hover {
+    @apply shadow-card-hover -translate-y-2;
+  }
 
 /* Focus styles for accessibility */
 a:focus-visible, button:focus-visible {

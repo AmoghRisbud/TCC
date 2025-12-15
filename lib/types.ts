@@ -1,5 +1,5 @@
 export interface ProgramSession { title: string; date: string; speakers?: string[]; }
-export interface Program { slug: string; title: string; shortDescription: string; fullDescription?: string; category?: string; startDate?: string; endDate?: string; location?: string; mode?: string; ctaLabel?: string; ctaUrl?: string; thumbnail?: string; brochureUrl?: string; tags?: string[]; featured?: boolean; status?: string; sessions?: ProgramSession[]; }
+export interface Program { slug: string; title: string; shortDescription: string; fullDescription?: string; logo?: string; category?: string; startDate?: string; endDate?: string; location?: string; mode?: string; ctaLabel?: string; ctaUrl?: string; thumbnail?: string; brochureUrl?: string; tags?: string[]; featured?: boolean; status?: string; sessions?: ProgramSession[]; }
 export interface ProjectMetric { label: string; value: string; }
 export interface Project { slug: string; title: string; summary: string; description?: string; year?: string; client?: string; impactMetrics?: ProjectMetric[]; thumbnail?: string; tags?: string[]; }
 export interface Testimonial { id: string; name: string; role?: string; organization?: string; quote: string; rating?: number; photo?: string; programRef?: string; date?: string; featured?: boolean; }
