@@ -28,8 +28,7 @@ export default async function researchPage() {
               <Link
                 key={p.slug}
                 href={p.pdf || `/research/${p.slug}`}
-                target={p.pdf ? "_blank" : undefined}
-                rel={p.pdf ? "noopener noreferrer" : undefined}
+                {...(p.pdf && { target: "_blank", rel: "noopener noreferrer" })}
                 className="card-interactive group"
               >
 

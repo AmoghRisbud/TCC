@@ -9,8 +9,7 @@ export function getRedisClient(): Redis {
     redis = new Redis(redisUrl, {
       maxRetriesPerRequest: 3,
       retryStrategy(times) {
-        const delay = Math.min(times * 50, 2000);
-        return delay;
+        return Math.min(times * 50, 2000);
       },
       // Handle connection errors gracefully
       lazyConnect: true,
