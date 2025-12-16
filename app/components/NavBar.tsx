@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import Image from 'next/image';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -18,6 +19,8 @@ const links = [
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const loading = status === 'loading';
 
   return (
     <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100">
@@ -50,9 +53,44 @@ export default function NavBar() {
               {l.label}
             </Link>
           ))}
-          <Link href="/community" className="ml-4 btn text-sm py-2">
-            Join Us
-          </Link>
+          
+          {/* Auth Buttons */}
+          {!loading && !session && (
+            <button 
+              onClick={() => signIn()}
+              className="ml-4 px-4 py-2 text-sm font-medium text-brand-primary border-2 border-brand-primary rounded-lg hover:bg-brand-primary hover:text-white transition-all duration-200"
+            >
+              Sign In
+            </button>
+          )}
+          
+          {!loading && session && (
+            <div className="ml-4 flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                {session.user.image && (
+                  <Image
+                    src={session.user.image}
+                    alt={session.user.name || 'User'}
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                )}
+                <span className="text-sm font-medium text-brand-dark">
+                  {session.user.name}
+                  {session.user.isAdmin && (
+                    <span className="ml-2 text-xs bg-brand-primary text-white px-2 py-0.5 rounded">Admin</span>
+                  )}
+                </span>
+              </div>
+              <button 
+                onClick={() => signOut()}
+                className="px-4 py-2 text-sm font-medium text-brand-dark/70 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
+              >
+                Sign Out
+              </button>
+            </div>
+          )}
         </nav>
 
         {/* Mobile Menu Button */}
@@ -95,14 +133,51 @@ export default function NavBar() {
                 {l.label}
               </Link>
             ))}
-            <div className="pt-4 px-4">
-              <Link 
-                href="/community" 
-                className="btn w-full text-center"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Join Us
-              </Link>
+            
+            {/* Mobile Auth */}
+            <div className="pt-4 px-4 space-y-2">
+              {!loading && !session && (
+                <button 
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    signIn();
+                  }}
+                  className="w-full px-4 py-3 text-sm font-medium text-brand-primary border-2 border-brand-primary rounded-lg hover:bg-brand-primary hover:text-white transition-all duration-200"
+                >
+                  Sign In
+                </button>
+              )}
+              
+              {!loading && session && (
+                <>
+                  <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg">
+                    {session.user.image && (
+                      <Image
+                        src={session.user.image}
+                        alt={session.user.name || 'User'}
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                    )}
+                    <div>
+                      <p className="text-sm font-medium text-brand-dark">{session.user.name}</p>
+                      {session.user.isAdmin && (
+                        <span className="text-xs bg-brand-primary text-white px-2 py-0.5 rounded">Admin</span>
+                      )}
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      signOut();
+                    }}
+                    className="w-full px-4 py-3 text-sm font-medium text-red-600 border-2 border-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all duration-200"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </nav>

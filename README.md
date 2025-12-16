@@ -1,10 +1,11 @@
 # The Collective Counsel (TCC) Website
 
-Static Next.js (App Router) + Tailwind + Redis-based Admin Content Management.
+Static Next.js (App Router) + Tailwind + Redis-based Admin Content Management + OAuth Authentication.
 
 ## Stack
 - Next.js 14 (App Router, SSG)
 - Tailwind CSS
+- NextAuth.js (OAuth Authentication)
 - Redis for dynamic content management (optional)
 - Markdown content in `content/**` (fallback)
 
@@ -30,12 +31,31 @@ npm start
 - `content/gallery`
 - `content/settings/site.md`
 
-## Admin Content Management
+## Authentication
 
-The site now supports dynamic content management through Redis-backed APIs:
+The site uses OAuth-based authentication with no database required (JWT-based sessions):
 
 ### Features
-- **Programs, Testimonials, Gallery, Research** - Edit via REST API
+- **OAuth Providers** - Sign in with Google or GitHub
+- **No Database Required** - JWT-based sessions
+- **Role-Based Access** - Admin and regular user roles
+- **Protected Routes** - Automatic protection for admin pages
+
+### Quick Setup
+1. Generate secret: `openssl rand -base64 32`
+2. Configure `.env.local` with OAuth credentials (see [AUTHENTICATION_SETUP.md](./AUTHENTICATION_SETUP.md))
+3. Set admin emails in environment variables
+4. Users can sign in at `/auth/signin`
+
+📖 **Full Documentation**: See [AUTHENTICATION_SETUP.md](./AUTHENTICATION_SETUP.md)
+
+## Admin Content Management
+
+The site supports dynamic content management through Redis-backed APIs with authentication:
+
+### Features
+- **Programs, Testimonials, Gallery, Research** - Edit via REST API or UI
+- **Protected Admin Routes** - Requires authentication and admin role
 - **No code changes required** - Content updates without redeployment
 - **Automatic fallback** - Works with markdown files when Redis is unavailable
 - **Migration tool** - One-click migration from markdown to Redis
@@ -45,7 +65,14 @@ The site now supports dynamic content management through Redis-backed APIs:
 2. Configure: Create `.env.local` with `REDIS_URL=redis://localhost:6379`
 3. Migrate content: `curl -X POST http://localhost:3000/api/admin/migrate`
 
-### API Endpoints
+### Admin Pages (Requires Authentication)
+- `/admin` - Admin dashboard
+- `/admin/programs` - Manage programs with UI
+- `/admin/testimonials` - Manage testimonials with UI
+- `/admin/gallery` - Manage gallery items with UI
+- `/admin/research` - Manage research articles with UI
+
+### API Endpoints (Requires Admin Role)
 - `GET/PUT/DELETE /api/admin/programs` - Manage programs
 - `GET/PUT/DELETE /api/admin/testimonials` - Manage testimonials
 - `GET/PUT/DELETE /api/admin/gallery` - Manage gallery items
