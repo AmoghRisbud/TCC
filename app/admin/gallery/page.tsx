@@ -1,17 +1,17 @@
 import Link from 'next/link';
 import SectionHeading from '../../components/SectionHeading';
-import { getPrograms } from '../../../lib/content';
-import ProgramsManagement from './ProgramsManagement';
+import { getGallery } from '../../../lib/content';
+import GalleryManagement from './GalleryManagement';
 
-export const metadata = { title: 'Manage Programs | Admin | TCC' };
+export const metadata = { title: 'Manage Gallery | Admin | TCC' };
 
-export default async function AdminProgramsPage() {
-  const programs = await getPrograms();
-
+export default async function AdminGalleryPage() {
+  const galleryItems = await getGallery();
+  
   return (
     <div>
       {/* Hero Section */}
-      <section className="section bg-gradient-to-r from-brand-primary to-brand-accent text-white">
+      <section className="section bg-brand-hero text-white from-brand-primary to-brand-accent text-white">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
             <nav className="mb-4">
@@ -19,22 +19,22 @@ export default async function AdminProgramsPage() {
                 ← Back to Admin Dashboard
               </Link>
             </nav>
-            <h1 className="h1 mb-6">Manage Programs</h1>
+            <h1 className="h1 mb-6">Manage Gallery</h1>
             <p className="text-xl text-white/80 leading-relaxed">
-              Add, edit, or remove programs available to students.
+              Upload and organize photos from events, workshops, and project activities.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Programs Management */}
+      {/* Gallery Management */}
       <section className="section bg-brand-light">
         <div className="container">
-          <SectionHeading
-            title="All Programs"
-            subtitle="Manage your programs from here."
+          <SectionHeading 
+            title="Gallery Items" 
+            subtitle="Manage your media gallery items."
           />
-          <ProgramsManagement initialPrograms={programs} />
+          <GalleryManagement initialItems={galleryItems} />
         </div>
       </section>
 
@@ -49,7 +49,7 @@ export default async function AdminProgramsPage() {
             </div>
             <h2 className="h2 mb-6 text-brand-dark">How It Works</h2>
             <p className="text-xl text-brand-muted mb-8">
-              Programs are managed through the admin API. Changes are stored in Redis and appear immediately on the site.
+              Gallery items are managed through the admin API. Changes are stored in Redis and appear immediately on the site.
             </p>
             <Link href="/admin" className="btn-secondary">
               Back to Dashboard
