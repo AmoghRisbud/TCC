@@ -1,12 +1,11 @@
 import Link from 'next/link';
-import AdminTestimonialsManager from './AdminTestimonialsManager';
+import AdminResearchManager from './AdminResearchManager';
 
-export const metadata = { title: 'Manage Testimonials | Admin | TCC' };
+export const metadata = { title: 'Manage Research | Admin | TCC' };
 
-export default async function AdminTestimonialsPage() {
+export default async function AdminResearchPage() {
   return (
     <div>
-      {/* Hero Section */}
       <section className="section bg-gradient-to-r from-brand-primary to-brand-accent text-white">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
@@ -15,18 +14,15 @@ export default async function AdminTestimonialsPage() {
                 ← Back to Admin Dashboard
               </Link>
             </nav>
-            <h1 className="h1 mb-6">Manage Testimonials</h1>
-            <p className="text-xl text-white/80 leading-relaxed">
-              Review, approve, and publish testimonials from students, educators, and partners.
-            </p>
+            <h1 className="h1 mb-6">Manage Research</h1>
+            <p className="text-xl text-white/80 leading-relaxed">Add, edit, or remove research articles and publications.</p>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Manager */}
       <section className="section bg-brand-light">
         <div className="container">
-          <AdminTestimonialsManager />
+          <AdminResearchManager />
         </div>
       </section>
     </div>

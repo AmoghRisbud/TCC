@@ -48,17 +48,36 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Redis connection failed' }, { status: 503 });
     }
 
-    const programs: Program[] = await request.json();
-    
-    // Validate data
-    if (!Array.isArray(programs)) {
-      return NextResponse.json({ error: 'Invalid data format' }, { status: 400 });
-    }
+    const body = await request.json();
 
     const redis = getRedisClient();
-    await redis.set(REDIS_KEY, JSON.stringify(programs));
+    const existingData = await redis.get(REDIS_KEY);
+    const existingPrograms: Program[] = existingData ? JSON.parse(existingData) : [];
 
-    return NextResponse.json({ success: true, programs });
+    // Support both bulk (array) and single program (object)
+    if (Array.isArray(body)) {
+      // Bulk replace all programs
+      await redis.set(REDIS_KEY, JSON.stringify(body));
+      return NextResponse.json({ success: true, programs: body });
+    }
+
+    const newProgram: Program = body as Program;
+
+    // Validate single program minimal requirements
+    if (!newProgram || typeof newProgram !== 'object' || !newProgram.slug) {
+      return NextResponse.json({ error: 'Invalid program payload: slug is required' }, { status: 400 });
+    }
+
+    // Prevent duplicates by slug
+    const exists = existingPrograms.some(p => p.slug === newProgram.slug);
+    if (exists) {
+      return NextResponse.json({ error: 'Program with this slug already exists' }, { status: 409 });
+    }
+
+    const updatedPrograms = [...existingPrograms, newProgram];
+    await redis.set(REDIS_KEY, JSON.stringify(updatedPrograms));
+
+    return NextResponse.json({ success: true, program: newProgram, total: updatedPrograms.length });
   } catch (error) {
     console.error('Error saving programs:', error);
     return NextResponse.json({ error: 'Failed to save programs' }, { status: 500 });

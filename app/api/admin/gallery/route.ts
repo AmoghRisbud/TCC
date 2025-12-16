@@ -48,17 +48,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Redis connection failed' }, { status: 503 });
     }
 
-    const gallery: GalleryItem[] = await request.json();
-    
-    // Validate data
-    if (!Array.isArray(gallery)) {
-      return NextResponse.json({ error: 'Invalid data format' }, { status: 400 });
-    }
+    const body = await request.json();
 
     const redis = getRedisClient();
-    await redis.set(REDIS_KEY, JSON.stringify(gallery));
+    const existingData = await redis.get(REDIS_KEY);
+    const existingGallery: GalleryItem[] = existingData ? JSON.parse(existingData) : [];
 
-    return NextResponse.json({ success: true, gallery });
+    // Support both bulk (array) and single item (object)
+    if (Array.isArray(body)) {
+      await redis.set(REDIS_KEY, JSON.stringify(body));
+      return NextResponse.json({ success: true, gallery: body });
+    }
+
+    const newItem: GalleryItem = body as GalleryItem;
+
+    if (!newItem || typeof newItem !== 'object' || !newItem.id) {
+      return NextResponse.json({ error: 'Invalid gallery payload: id is required' }, { status: 400 });
+    }
+
+    const exists = existingGallery.some(g => g.id === newItem.id);
+    if (exists) {
+      return NextResponse.json({ error: 'Gallery item with this id already exists' }, { status: 409 });
+    }
+
+    const updatedGallery = [...existingGallery, newItem];
+    await redis.set(REDIS_KEY, JSON.stringify(updatedGallery));
+
+    return NextResponse.json({ success: true, item: newItem, total: updatedGallery.length });
   } catch (error) {
     console.error('Error saving gallery items:', error);
     return NextResponse.json({ error: 'Failed to save gallery items' }, { status: 500 });
