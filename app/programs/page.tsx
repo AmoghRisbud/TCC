@@ -5,8 +5,8 @@ import Image from 'next/image';
 
 export const metadata = { title: 'Programs | TCC' };
 
-export default function ProgramsPage() {
-  const programs = getPrograms();
+export default async function ProgramsPage() {
+  const programs = await getPrograms();
 
   return (
     <div>

@@ -4,8 +4,8 @@ import { getGallery } from '../../lib/content';
 
 export const metadata = { title: 'Media | TCC' };
 
-export default function MediaPage() {
-  const items = getGallery();
+export default async function MediaPage() {
+  const items = await getGallery();
 
   return (
     <div>

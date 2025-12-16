@@ -1,12 +1,14 @@
 import { getResearch } from '../../../lib/content';
 import { notFound } from 'next/navigation';
 
-export function generateStaticParams() {
-  return getResearch().map(p => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const research = await getResearch();
+  return research.map(p => ({ slug: p.slug }));
 }
 
-export default function ProjectDetail({ params }: { params: { slug: string } }) {
-  const project = getResearch().find(p => p.slug === params.slug);
+export default async function ProjectDetail({ params }: { params: { slug: string } }) {
+  const research = await getResearch();
+  const project = research.find(p => p.slug === params.slug);
   if (!project) return notFound();
   return (
     <div className="section container max-w-3xl">

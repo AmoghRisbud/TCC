@@ -5,8 +5,8 @@ import { getPrograms } from '../../../lib/content';
 
 export const metadata = { title: 'Manage Programs | Admin | TCC' };
 
-export default function AdminProgramsPage() {
-  const programs = getPrograms();
+export default async function AdminProgramsPage() {
+  const programs = await getPrograms();
 
   return (
     <div>

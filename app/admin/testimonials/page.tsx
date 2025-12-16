@@ -4,8 +4,8 @@ import { getTestimonials } from '../../../lib/content';
 
 export const metadata = { title: 'Manage Testimonials | Admin | TCC' };
 
-export default function AdminTestimonialsPage() {
-  const testimonials = getTestimonials();
+export default async function AdminTestimonialsPage() {
+  const testimonials = await getTestimonials();
   
   return (
     <div>

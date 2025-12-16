@@ -3,10 +3,11 @@ import Link from 'next/link';
 import { getPrograms, getTestimonials, getGallery } from '../lib/content';
 import Image from 'next/image';
 
-export default function HomePage() {
-  const programs = getPrograms().slice(0, 2);
-  const allTestimonials = getTestimonials();
-  const gallery = getGallery();
+export default async function HomePage() {
+  const allPrograms = await getPrograms();
+  const programs = allPrograms.slice(0, 2);
+  const allTestimonials = await getTestimonials();
+  const gallery = await getGallery();
 
   // Prioritize featured testimonials, fall back to first 3 if none are featured
   const testimonials = allTestimonials

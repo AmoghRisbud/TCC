@@ -3,12 +3,14 @@ import Link from 'next/link';
 import { getPrograms } from '../../../lib/content';
 import { notFound } from 'next/navigation';
 
-export function generateStaticParams() {
-  return getPrograms().map(p => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const programs = await getPrograms();
+  return programs.map(p => ({ slug: p.slug }));
 }
 
-export default function ProgramDetail({ params }) {
-  const program = getPrograms().find(p => p.slug === params.slug);
+export default async function ProgramDetail({ params }) {
+  const programs = await getPrograms();
+  const program = programs.find(p => p.slug === params.slug);
   if (!program) return notFound();
 
   return (

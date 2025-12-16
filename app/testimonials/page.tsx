@@ -3,8 +3,8 @@ import TestimonialsGrid from './TestimonialsGrid';
 
 export const metadata = { title: 'Testimonials | TCC' };
 
-export default function TestimonialsPage() {
-  const testimonials = getTestimonials();
+export default async function TestimonialsPage() {
+  const testimonials = await getTestimonials();
 
   return (
     <div>

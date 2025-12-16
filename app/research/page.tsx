@@ -4,8 +4,8 @@ import { getResearch } from '../../lib/content';
 
 export const metadata = { title: 'Research | TCC' };
 
-export default function researchPage() {
-  const research = getResearch();
+export default async function researchPage() {
+  const research = await getResearch();
   return (
     <div>
       {/* Hero Section */}
