@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { Testimonial } from '../../lib/types';
 
 // -------------------- TestimonialCard Component --------------------
-function TestimonialCard({ t }) {
+function TestimonialCard({ t }: { t: Testimonial }) {
   const [expanded, setExpanded] = useState(false); // state per card
   const isLong = t.quote.length > 250; // show read more only if long
 
@@ -29,7 +30,7 @@ function TestimonialCard({ t }) {
           {[...Array(5)].map((_, i) => (
             <svg
               key={i}
-              className={`w-5 h-5 ${i < t.rating ? 'text-yellow-400' : 'text-gray-200'}`}
+              className={`w-5 h-5 ${i < (t.rating || 0) ? 'text-yellow-400' : 'text-gray-200'}`}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -72,7 +73,7 @@ function TestimonialCard({ t }) {
 }
 
 // -------------------- TestimonialsGrid Component --------------------
-export default function TestimonialsGrid({ testimonials }) {
+export default function TestimonialsGrid({ testimonials }: { testimonials: Testimonial[] }) {
   if (!testimonials || testimonials.length === 0) {
     return (
       <div className="text-center py-16">

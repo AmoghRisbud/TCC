@@ -8,7 +8,7 @@ export async function generateStaticParams() {
   return programs.map(p => ({ slug: p.slug }));
 }
 
-export default async function ProgramDetail({ params }) {
+export default async function ProgramDetail({ params }: { params: { slug: string } }) {
   const programs = await getPrograms();
   const program = programs.find(p => p.slug === params.slug);
   if (!program) return notFound();

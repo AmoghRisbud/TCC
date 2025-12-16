@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
+import { Testimonial } from '../../lib/types';
 
-export default function TestimonialCard({ t }) {
+export default function TestimonialCard({ t }: { t: Testimonial }) {
   const [expanded, setExpanded] = useState(false);
   const isLong = t.quote.length > 250; // adjust length as needed
 
