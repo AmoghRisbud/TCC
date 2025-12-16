@@ -48,17 +48,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Redis connection failed' }, { status: 503 });
     }
 
-    const research: Research[] = await request.json();
-    
-    // Validate data
-    if (!Array.isArray(research)) {
-      return NextResponse.json({ error: 'Invalid data format' }, { status: 400 });
-    }
+    const body = await request.json();
 
     const redis = getRedisClient();
-    await redis.set(REDIS_KEY, JSON.stringify(research));
+    const existingData = await redis.get(REDIS_KEY);
+    const existingResearch: Research[] = existingData ? JSON.parse(existingData) : [];
 
-    return NextResponse.json({ success: true, research });
+    // Support both bulk (array) and single article (object)
+    if (Array.isArray(body)) {
+      await redis.set(REDIS_KEY, JSON.stringify(body));
+      return NextResponse.json({ success: true, research: body });
+    }
+
+    const newArticle: Research = body as Research;
+
+    if (!newArticle || typeof newArticle !== 'object' || !newArticle.slug) {
+      return NextResponse.json({ error: 'Invalid research payload: slug is required' }, { status: 400 });
+    }
+
+    const exists = existingResearch.some(r => r.slug === newArticle.slug);
+    if (exists) {
+      return NextResponse.json({ error: 'Research article with this slug already exists' }, { status: 409 });
+    }
+
+    const updatedResearch = [...existingResearch, newArticle];
+    await redis.set(REDIS_KEY, JSON.stringify(updatedResearch));
+
+    return NextResponse.json({ success: true, research: newArticle, total: updatedResearch.length });
   } catch (error) {
     console.error('Error saving research articles:', error);
     return NextResponse.json({ error: 'Failed to save research articles' }, { status: 500 });

@@ -2,6 +2,7 @@ import './globals.css';
 import React from 'react';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
+import SessionProvider from './components/SessionProvider';
 
 export const metadata = {
   title: 'The Collective Counsel',
@@ -12,9 +13,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <NavBar />
-        <main>{children}</main>
-        <Footer />
+        <SessionProvider>
+          <NavBar />
+          <main>{children}</main>
+          <Footer />
+        </SessionProvider>
       </body>
     </html>
   );

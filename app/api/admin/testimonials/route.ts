@@ -48,17 +48,33 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Redis connection failed' }, { status: 503 });
     }
 
-    const testimonials: Testimonial[] = await request.json();
-    
-    // Validate data
-    if (!Array.isArray(testimonials)) {
-      return NextResponse.json({ error: 'Invalid data format' }, { status: 400 });
-    }
+    const body = await request.json();
 
     const redis = getRedisClient();
-    await redis.set(REDIS_KEY, JSON.stringify(testimonials));
+    const existingData = await redis.get(REDIS_KEY);
+    const existingTestimonials: Testimonial[] = existingData ? JSON.parse(existingData) : [];
 
-    return NextResponse.json({ success: true, testimonials });
+    // Support both bulk (array) and single testimonial (object)
+    if (Array.isArray(body)) {
+      await redis.set(REDIS_KEY, JSON.stringify(body));
+      return NextResponse.json({ success: true, testimonials: body });
+    }
+
+    const newTestimonial: Testimonial = body as Testimonial;
+
+    if (!newTestimonial || typeof newTestimonial !== 'object' || !newTestimonial.id) {
+      return NextResponse.json({ error: 'Invalid testimonial payload: id is required' }, { status: 400 });
+    }
+
+    const exists = existingTestimonials.some(t => t.id === newTestimonial.id);
+    if (exists) {
+      return NextResponse.json({ error: 'Testimonial with this id already exists' }, { status: 409 });
+    }
+
+    const updatedTestimonials = [...existingTestimonials, newTestimonial];
+    await redis.set(REDIS_KEY, JSON.stringify(updatedTestimonials));
+
+    return NextResponse.json({ success: true, testimonial: newTestimonial, total: updatedTestimonials.length });
   } catch (error) {
     console.error('Error saving testimonials:', error);
     return NextResponse.json({ error: 'Failed to save testimonials' }, { status: 500 });
