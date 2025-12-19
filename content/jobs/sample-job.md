@@ -3,6 +3,7 @@ title: "Community Intern"
 department: "Outreach"
 location: "Remote"
 type: "Internship"
+category: tcc
 description: "Assist with community engagement and event coordination."
 requirements:
   - "Strong communication skills"

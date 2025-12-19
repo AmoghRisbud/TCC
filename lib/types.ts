@@ -68,6 +68,7 @@ export interface Job {
   title: string;
   department?: string;
   location?: string;
+  category: string,
   type?: string;
   description?: string;
   requirements?: string[];
