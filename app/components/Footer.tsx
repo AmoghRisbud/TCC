@@ -12,7 +12,7 @@ const quickLinks = [
 
 const socialLinks = [
   {
-    href: "https://linkedin.com",
+    href: "https://www.linkedin.com/company/the-collective-counsel/",
     label: "LinkedIn",
     icon: (
       <svg
@@ -26,7 +26,7 @@ const socialLinks = [
     ),
   },
   {
-    href: "https://instagram.com",
+    href: "https://www.instagram.com/the_collective_counsel?igsh=MTZwY3VyaHN6NWJ1ag==",
     label: "Instagram",
     icon: (
       <svg
