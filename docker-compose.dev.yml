@@ -1,0 +1,66 @@
+services:
+  # Redis Database
+  redis:
+    image: redis:7-alpine
+    container_name: tcc-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_dev:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tcc-network-dev
+
+  # RedisInsight - Redis GUI (Development Only)
+  redis-insight:
+    image: redis/redisinsight:latest
+    container_name: tcc-redis-insight-dev
+    restart: unless-stopped
+    ports:
+      - "5540:5540"
+    volumes:
+      - redisinsight_data_dev:/data
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - tcc-network-dev
+
+  # Next.js Application (Development)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tcc-app-dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - REDIS_URL=redis://redis:6379
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - ADMIN_EMAILS=${ADMIN_EMAILS}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - tcc-network-dev
+
+volumes:
+  redis_data_dev:
+    driver: local
+  redisinsight_data_dev:
+    driver: local
+
+networks:
+  tcc-network-dev:
+    driver: bridge

@@ -1,12 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import SectionHeading from "../components/SectionHeading";
-import { getAnnouncements } from "../../lib/announcements";
+import { Announcement } from "../../lib/types";
 
 export default function AnnouncementsPage() {
-  const announcements = getAnnouncements();
+  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/announcements')
+      .then(res => res.json())
+      .then(data => {
+        // Ensure data is an array
+        const announcementsArray = Array.isArray(data) ? data : [];
+        setAnnouncements(announcementsArray);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching announcements:', err);
+        setAnnouncements([]);
+        setLoading(false);
+      });
+  }, []);
 
   // Modal state
   const [activeImage, setActiveImage] = useState<string | null>(null);
@@ -20,8 +37,17 @@ export default function AnnouncementsPage() {
           subtitle="Latest updates, programs, and opportunities"
         />
 
-        <div className="space-y-6">
-          {announcements.map((a) => (
+        {loading ? (
+          <div className="text-center py-12">
+            <p className="text-brand-muted">Loading announcements...</p>
+          </div>
+        ) : announcements.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-brand-muted">No announcements available.</p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {Array.isArray(announcements) && announcements.map((a) => (
             <div
               key={a.id}
               className="
@@ -62,6 +88,7 @@ export default function AnnouncementsPage() {
             </div>
           ))}
         </div>
+        )}
       </div>
 
       {/* IMAGE MODAL */}

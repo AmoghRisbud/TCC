@@ -8,6 +8,7 @@ const emptyJob: Job = {
   title: '',
   department: '',
   location: '',
+  category: 'tcc',
   type: 'Full-time',
   description: '',
   requirements: [],
@@ -229,6 +230,22 @@ export default function AdminCareersManager() {
                       placeholder="e.g., senior-legal-associate"
                     />
                   </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+                  <select
+                    required
+                    value={formData.category}
+                    onChange={e => setFormData({ ...formData, category: e.target.value })}
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
+                  >
+                    <option value="tcc">Careers with TCC</option>
+                    <option value="law">Careers in Law</option>
+                  </select>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Select "Careers with TCC" for internal team positions, or "Careers in Law" for internships and legal career opportunities
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -4,9 +4,8 @@ import { getPrograms, getTestimonials, getGallery } from "../lib/content";
 import Image from "next/image";
 import { getAnnouncements } from "../lib/announcements";
 
-const announcements = getAnnouncements();
-
 export default async function HomePage() {
+  const announcements = await getAnnouncements();
   const allPrograms = await getPrograms();
   const programs = allPrograms.slice(0, 2);
   const allTestimonials = await getTestimonials();

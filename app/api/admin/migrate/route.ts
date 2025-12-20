@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { getRedisClient, ensureRedisConnection } from '@/lib/redis';
-import { Program, Research, Testimonial, GalleryItem, Job } from '@/lib/types';
+import { Program, Research, Testimonial, GalleryItem, Job, Announcement } from '@/lib/types';
 
 const contentRoot = path.join(process.cwd(), 'content');
 
@@ -60,6 +60,16 @@ export async function POST() {
       await redis.set('tcc:careers', JSON.stringify(careers));
     }
 
+    // Migrate announcements
+    const announcements: Announcement[] = readMarkdownDir('announcements', (d, slug) => ({ 
+      slug, 
+      id: slug, 
+      ...d 
+    }));
+    if (announcements.length > 0) {
+      await redis.set('tcc:announcements', JSON.stringify(announcements));
+    }
+
     return NextResponse.json({
       success: true,
       migrated: {
@@ -68,6 +78,7 @@ export async function POST() {
         testimonials: testimonials.length,
         gallery: gallery.length,
         careers: careers.length,
+        announcements: announcements.length,
       },
       message: 'Content successfully migrated from markdown files to Redis'
     });

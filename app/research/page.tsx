@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import SectionHeading from '../components/SectionHeading';
 import React from 'react';
-import { Research, ProjectMetric } from '@/lib/types';
+import { Research } from '@/lib/types';
 
 interface ResearchWithViews extends Research {
   views?: number;
@@ -45,24 +45,33 @@ export default function ResearchPage() {
     loadResearch();
   }, []);
 
-  // Function to handle research click and track view
+  // Function to handle research click and track view (unique users only)
   const handleResearchClick = async (slug: string, e: React.MouseEvent) => {
-    // Track the view
-    try {
-      await fetch('/api/research/views', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug })
-      });
-      
-      // Update the local state to show the new count immediately
-      setResearch(prev => prev.map(item => 
-        item.slug === slug 
-          ? { ...item, views: (item.views || 0) + 1 }
-          : item
-      ));
-    } catch (error) {
-      console.error('Error tracking view:', error);
+    // Check if user has already viewed this article
+    const viewedArticles = JSON.parse(localStorage.getItem('viewedResearch') || '[]');
+    
+    // Only track if user hasn't viewed this article before
+    if (!viewedArticles.includes(slug)) {
+      try {
+        await fetch('/api/research/views', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug })
+        });
+        
+        // Mark this article as viewed
+        viewedArticles.push(slug);
+        localStorage.setItem('viewedResearch', JSON.stringify(viewedArticles));
+        
+        // Update the local state to show the new count immediately
+        setResearch(prev => prev.map(item => 
+          item.slug === slug 
+            ? { ...item, views: (item.views || 0) + 1 }
+            : item
+        ));
+      } catch (error) {
+        console.error('Error tracking view:', error);
+      }
     }
   };
 
@@ -119,20 +128,17 @@ export default function ResearchPage() {
                     {p.summary}
                   </p>
 
-                  {p.impactMetrics && p.impactMetrics.length > 0 && (
-                    <div className="flex flex-wrap gap-4 mb-6 pt-4 border-t border-gray-100">
-                      {p.impactMetrics.slice(0, 2).map((metric: ProjectMetric, index: number) => (
-                        <div key={index} className="text-center">
-                          <div className="text-2xl font-bold gradient-text">
-                            {metric.value}
-                          </div>
-                          <div className="text-xs text-brand-muted">
-                            {metric.label}
-                          </div>
-                        </div>
-                      ))}
+                  {/* Dynamic View Counter - Students Reached */}
+                  <div className="flex flex-wrap gap-4 mb-6 pt-4 border-t border-gray-100">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold gradient-text">
+                        {p.views || 0}
+                      </div>
+                      <div className="text-xs text-brand-muted">
+                        Students Reached
+                      </div>
                     </div>
-                  )}
+                  </div>
                   
                   <span className="inline-flex items-center gap-2 text-brand-primary font-medium group-hover:gap-3 transition-all">
                     View Research Article

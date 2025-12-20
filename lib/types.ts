@@ -90,6 +90,15 @@ export interface GalleryItem {
   date?: string;
   attribution?: string;
 }
+export interface Announcement {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+}
+
 export interface SiteSettings {
   siteName: string;
   heroCopy?: string;
