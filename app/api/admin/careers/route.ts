@@ -1,0 +1,143 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { getRedisClient, ensureRedisConnection } from '@/lib/redis';
+import { Job } from '@/lib/types';
+
+const REDIS_KEY = 'tcc:careers';
+
+// GET all jobs or a single job by slug
+export async function GET(request: NextRequest) {
+  try {
+    const connected = await ensureRedisConnection();
+    if (!connected) {
+      return NextResponse.json({ error: 'Redis connection failed' }, { status: 503 });
+    }
+
+    const redis = getRedisClient();
+    const data = await redis.get(REDIS_KEY);
+    
+    if (!data) {
+      return NextResponse.json([]);
+    }
+
+    const jobs: Job[] = JSON.parse(data);
+    
+    // Check if a specific job is requested
+    const { searchParams } = new URL(request.url);
+    const slug = searchParams.get('slug');
+    
+    if (slug) {
+      const job = jobs.find(j => j.slug === slug);
+      if (!job) {
+        return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+      }
+      return NextResponse.json(job);
+    }
+    
+    return NextResponse.json(jobs);
+  } catch (error) {
+    console.error('Error fetching jobs:', error);
+    return NextResponse.json({ error: 'Failed to fetch jobs' }, { status: 500 });
+  }
+}
+
+// POST - Create a new job
+export async function POST(request: NextRequest) {
+  try {
+    const connected = await ensureRedisConnection();
+    if (!connected) {
+      return NextResponse.json({ error: 'Redis connection failed' }, { status: 503 });
+    }
+
+    const body = await request.json();
+    const newJob: Job = body as Job;
+
+    if (!newJob || !newJob.slug || !newJob.title) {
+      return NextResponse.json({ error: 'Invalid job payload: slug and title are required' }, { status: 400 });
+    }
+
+    const redis = getRedisClient();
+    const existingData = await redis.get(REDIS_KEY);
+    const existingJobs: Job[] = existingData ? JSON.parse(existingData) : [];
+
+    const exists = existingJobs.some(j => j.slug === newJob.slug);
+    if (exists) {
+      return NextResponse.json({ error: 'Job with this slug already exists' }, { status: 409 });
+    }
+
+    const updatedJobs = [...existingJobs, newJob];
+    await redis.set(REDIS_KEY, JSON.stringify(updatedJobs));
+
+    return NextResponse.json({ success: true, job: newJob });
+  } catch (error) {
+    console.error('Error saving job:', error);
+    return NextResponse.json({ error: 'Failed to save job' }, { status: 500 });
+  }
+}
+
+// PUT - Update a job
+export async function PUT(request: NextRequest) {
+  try {
+    const connected = await ensureRedisConnection();
+    if (!connected) {
+      return NextResponse.json({ error: 'Redis connection failed' }, { status: 503 });
+    }
+
+    const updatedJob: Job = await request.json();
+    
+    if (!updatedJob.slug) {
+      return NextResponse.json({ error: 'Job slug is required' }, { status: 400 });
+    }
+
+    const redis = getRedisClient();
+    const data = await redis.get(REDIS_KEY);
+    const jobs: Job[] = data ? JSON.parse(data) : [];
+    
+    const index = jobs.findIndex(j => j.slug === updatedJob.slug);
+    
+    if (index === -1) {
+      return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+    }
+
+    jobs[index] = { ...jobs[index], ...updatedJob };
+    await redis.set(REDIS_KEY, JSON.stringify(jobs));
+
+    return NextResponse.json({ success: true, job: jobs[index] });
+  } catch (error) {
+    console.error('Error updating job:', error);
+    return NextResponse.json({ error: 'Failed to update job' }, { status: 500 });
+  }
+}
+
+// DELETE - Remove a job
+export async function DELETE(request: NextRequest) {
+  try {
+    const connected = await ensureRedisConnection();
+    if (!connected) {
+      return NextResponse.json({ error: 'Redis connection failed' }, { status: 503 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const slug = searchParams.get('slug');
+
+    if (!slug) {
+      return NextResponse.json({ error: 'Job slug is required' }, { status: 400 });
+    }
+
+    const redis = getRedisClient();
+    const data = await redis.get(REDIS_KEY);
+    const jobs: Job[] = data ? JSON.parse(data) : [];
+    
+    const filteredJobs = jobs.filter(j => j.slug !== slug);
+    
+    if (filteredJobs.length === jobs.length) {
+      return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+    }
+
+    await redis.set(REDIS_KEY, JSON.stringify(filteredJobs));
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting job:', error);
+    return NextResponse.json({ error: 'Failed to delete job' }, { status: 500 });
+  }
+}

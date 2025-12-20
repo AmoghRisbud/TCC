@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import SectionHeading from '../components/SectionHeading';
 import { getJobs } from '../../lib/content';
+import CVSubmissionForm from './CVSubmissionForm';
 
 export const metadata = { title: 'Careers | TCC' };
+export const dynamic = 'force-dynamic';
 
-export default function CareersPage() {
-  const jobs = getJobs();
+export default async function CareersPage() {
+  const jobs = await getJobs();
   const hasActiveJobs = jobs.length > 0;
   
   return (
@@ -95,26 +97,13 @@ export default function CareersPage() {
       {/* Contact CTA */}
       <section className="section bg-white">
         <div className="container">
-          <div className="max-w-3xl mx-auto text-center">
+          <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="h2 mb-6 text-brand-dark">Interested in Working With Us?</h2>
             <p className="text-xl text-brand-muted mb-8">
-              Send your CV and a brief introduction to our email. We&apos;ll reach out when opportunities arise.
-            </p>
-            <a 
-              href="mailto:info.thecollectivecounsel@gmail.com" 
-              className="btn"
-            >
-              <span className="flex items-center gap-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-                Send Your CV
-              </span>
-            </a>
-            <p className="mt-4 text-sm text-brand-muted">
-              info.thecollectivecounsel@gmail.com
+              Send your CV and a brief introduction. We&apos;ll reach out when opportunities arise.
             </p>
           </div>
+          <CVSubmissionForm />
         </div>
       </section>
     </div>

@@ -57,7 +57,11 @@ export const getGallery = async (): Promise<GalleryItem[]> => {
 
 // Keep these as sync functions since they're not managed in Redis
 export const getTeam = (): TeamMember[] => readMarkdownDir('team', (d, slug) => ({ slug, ...d }));
-export const getJobs = (): Job[] => readMarkdownDir('jobs', (d, slug) => ({ slug, ...d }));
+
+export const getJobs = async (): Promise<Job[]> => {
+  return getFromRedisOrMarkdown('tcc:careers', 'jobs', (d, slug) => ({ slug, ...d }));
+};
+
 export const getSiteSettings = (): SiteSettings => {
   const file = path.join(contentRoot, 'settings', 'site.md');
   if (!fs.existsSync(file)) return { siteName: 'TCC' };

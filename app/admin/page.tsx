@@ -1,5 +1,6 @@
 import SectionHeading from '../components/SectionHeading';
 import Link from 'next/link';
+import MigrationButton from './MigrationButton';
 
 export const metadata = { title: 'Admin | TCC' };
 
@@ -37,6 +38,7 @@ const adminFeatures = [
   {
     title: 'Job Listings',
     description: 'Post new career opportunities and manage existing job listings.',
+    href: '/admin/careers',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -68,7 +70,7 @@ export default function AdminPage() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="section bg-brand-hero text-white from-brand-primary to-brand-accent text-white">
+      <section className="section bg-gradient-to-r from-brand-primary to-brand-accent text-white">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="h1 mb-6">Admin Dashboard</h1>
@@ -133,8 +135,19 @@ export default function AdminPage() {
         </div>
       </section>
 
-      {/* Info Section */}
+      {/* Migration Section */}
       <section className="section bg-white">
+        <div className="container">
+          <SectionHeading 
+            title="System Utilities" 
+            subtitle="Manage system-wide operations and data migration."
+          />
+          <MigrationButton />
+        </div>
+      </section>
+
+      {/* Info Section */}
+      <section className="section bg-brand-light">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
             <div className="w-20 h-20 mx-auto mb-8 bg-brand-secondary/10 rounded-full flex items-center justify-center">
@@ -142,15 +155,14 @@ export default function AdminPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h2 className="h2 mb-6 text-brand-dark">Getting Started</h2>
+            <h2 className="h2 mb-6 text-brand-dark">Need Help?</h2>
             <p className="text-xl text-brand-muted mb-8">
-              This admin section displays the content management capabilities that will be available on this platform. 
-              These features are currently in preview mode. To enable full admin functionality, 
-              contact us to request appropriate access permissions for your role.
+              For questions about the admin panel or to request additional permissions, 
+              please contact the system administrator.
             </p>
             <Link href="/contact" className="btn">
               <span className="flex items-center gap-2">
-                Request Access
+                Contact Support
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
