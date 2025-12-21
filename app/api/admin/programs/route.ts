@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getRedisClient, ensureRedisConnection } from '@/lib/redis';
 import { Program } from '@/lib/types';
 
@@ -77,6 +78,10 @@ export async function POST(request: NextRequest) {
     const updatedPrograms = [...existingPrograms, newProgram];
     await redis.set(REDIS_KEY, JSON.stringify(updatedPrograms));
 
+    // Revalidate programs pages
+    revalidatePath('/programs');
+    revalidatePath('/programs/[slug]', 'page');
+
     return NextResponse.json({ success: true, program: newProgram, total: updatedPrograms.length });
   } catch (error) {
     console.error('Error saving programs:', error);
@@ -111,6 +116,10 @@ export async function PUT(request: NextRequest) {
     }
 
     await redis.set(REDIS_KEY, JSON.stringify(programs));
+
+    // Revalidate programs pages
+    revalidatePath('/programs');
+    revalidatePath('/programs/[slug]', 'page');
 
     return NextResponse.json({ success: true, program: updatedProgram });
   } catch (error) {
@@ -150,6 +159,10 @@ export async function DELETE(request: NextRequest) {
     const deletedCount = programs.length - filteredPrograms.length;
 
     await redis.set(REDIS_KEY, JSON.stringify(filteredPrograms));
+
+    // Revalidate programs pages
+    revalidatePath('/programs');
+    revalidatePath('/programs/[slug]', 'page');
 
     return NextResponse.json({ 
       success: true, 

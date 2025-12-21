@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getRedisClient, ensureRedisConnection } from '@/lib/redis';
 import { Job } from '@/lib/types';
 
@@ -67,6 +68,8 @@ export async function POST(request: NextRequest) {
     const updatedJobs = [...existingJobs, newJob];
     await redis.set(REDIS_KEY, JSON.stringify(updatedJobs));
 
+    revalidatePath('/careers');
+
     return NextResponse.json({ success: true, job: newJob });
   } catch (error) {
     console.error('Error saving job:', error);
@@ -101,6 +104,8 @@ export async function PUT(request: NextRequest) {
     jobs[index] = { ...jobs[index], ...updatedJob };
     await redis.set(REDIS_KEY, JSON.stringify(jobs));
 
+    revalidatePath('/careers');
+
     return NextResponse.json({ success: true, job: jobs[index] });
   } catch (error) {
     console.error('Error updating job:', error);
@@ -134,6 +139,8 @@ export async function DELETE(request: NextRequest) {
     }
 
     await redis.set(REDIS_KEY, JSON.stringify(filteredJobs));
+
+    revalidatePath('/careers');
 
     return NextResponse.json({ success: true });
   } catch (error) {

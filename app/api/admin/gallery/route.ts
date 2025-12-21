@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getRedisClient, ensureRedisConnection } from '@/lib/redis';
 import { GalleryItem } from '@/lib/types';
 
@@ -57,6 +58,7 @@ export async function POST(request: NextRequest) {
     // Support both bulk (array) and single item (object)
     if (Array.isArray(body)) {
       await redis.set(REDIS_KEY, JSON.stringify(body));
+      revalidatePath('/media');
       return NextResponse.json({ success: true, gallery: body });
     }
 
@@ -73,6 +75,8 @@ export async function POST(request: NextRequest) {
 
     const updatedGallery = [...existingGallery, newItem];
     await redis.set(REDIS_KEY, JSON.stringify(updatedGallery));
+
+    revalidatePath('/media');
 
     return NextResponse.json({ success: true, item: newItem, total: updatedGallery.length });
   } catch (error) {
@@ -108,6 +112,8 @@ export async function PUT(request: NextRequest) {
     }
 
     await redis.set(REDIS_KEY, JSON.stringify(gallery));
+
+    revalidatePath('/media');
 
     return NextResponse.json({ success: true, item: updatedItem });
   } catch (error) {
@@ -147,6 +153,8 @@ export async function DELETE(request: NextRequest) {
     const deletedCount = gallery.length - filteredGallery.length;
 
     await redis.set(REDIS_KEY, JSON.stringify(filteredGallery));
+
+    revalidatePath('/media');
 
     return NextResponse.json({ 
       success: true, 

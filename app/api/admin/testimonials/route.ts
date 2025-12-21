@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getRedisClient, ensureRedisConnection } from '@/lib/redis';
 import { Testimonial } from '@/lib/types';
 
@@ -57,6 +58,7 @@ export async function POST(request: NextRequest) {
     // Support both bulk (array) and single testimonial (object)
     if (Array.isArray(body)) {
       await redis.set(REDIS_KEY, JSON.stringify(body));
+      revalidatePath('/testimonials');
       return NextResponse.json({ success: true, testimonials: body });
     }
 
@@ -73,6 +75,8 @@ export async function POST(request: NextRequest) {
 
     const updatedTestimonials = [...existingTestimonials, newTestimonial];
     await redis.set(REDIS_KEY, JSON.stringify(updatedTestimonials));
+
+    revalidatePath('/testimonials');
 
     return NextResponse.json({ success: true, testimonial: newTestimonial, total: updatedTestimonials.length });
   } catch (error) {
@@ -108,6 +112,8 @@ export async function PUT(request: NextRequest) {
     }
 
     await redis.set(REDIS_KEY, JSON.stringify(testimonials));
+
+    revalidatePath('/testimonials');
 
     return NextResponse.json({ success: true, testimonial: updatedTestimonial });
   } catch (error) {
@@ -147,6 +153,8 @@ export async function DELETE(request: NextRequest) {
     const deletedCount = testimonials.length - filteredTestimonials.length;
 
     await redis.set(REDIS_KEY, JSON.stringify(filteredTestimonials));
+
+    revalidatePath('/testimonials');
 
     return NextResponse.json({ 
       success: true, 

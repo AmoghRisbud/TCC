@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getRedisClient, ensureRedisConnection } from '@/lib/redis';
 import { Announcement } from '@/lib/types';
 
@@ -63,6 +64,8 @@ export async function POST(request: NextRequest) {
     if (Array.isArray(body)) {
       // Bulk replace all announcements
       await redis.set(REDIS_KEY, JSON.stringify(body));
+      revalidatePath('/announcements');
+      revalidatePath('/announcements/[slug]', 'page');
       return NextResponse.json({ success: true, announcements: body });
     }
 
@@ -84,6 +87,9 @@ export async function POST(request: NextRequest) {
 
     const updatedAnnouncements = [...existingAnnouncements, newAnnouncement];
     await redis.set(REDIS_KEY, JSON.stringify(updatedAnnouncements));
+
+    revalidatePath('/announcements');
+    revalidatePath('/announcements/[slug]', 'page');
 
     return NextResponse.json({ success: true, announcement: newAnnouncement, total: updatedAnnouncements.length });
   } catch (error) {
@@ -126,6 +132,9 @@ export async function PUT(request: NextRequest) {
     announcements[index] = updatedAnnouncement;
     await redis.set(REDIS_KEY, JSON.stringify(announcements));
 
+    revalidatePath('/announcements');
+    revalidatePath('/announcements/[slug]', 'page');
+
     return NextResponse.json({ success: true, announcement: updatedAnnouncement });
   } catch (error) {
     console.error('Error updating announcement:', error);
@@ -163,6 +172,9 @@ export async function DELETE(request: NextRequest) {
     }
 
     await redis.set(REDIS_KEY, JSON.stringify(filtered));
+
+    revalidatePath('/announcements');
+    revalidatePath('/announcements/[slug]', 'page');
 
     return NextResponse.json({ success: true, message: 'Announcement deleted', remaining: filtered.length });
   } catch (error) {
