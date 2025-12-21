@@ -17,6 +17,7 @@ export interface Program {
   ctaLabel?: string;
   ctaUrl?: string;
   brochureUrl?: string;
+  enrollmentFormUrl?: string;
   tags?: string[];
   featured?: boolean;
   status?: string;

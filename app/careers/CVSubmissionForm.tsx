@@ -1,14 +1,36 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function CVSubmissionForm() {
+  const searchParams = useSearchParams();
+  const position = searchParams.get('position');
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     message: '',
   });
+  
+  // Pre-fill message when position is provided in URL
+  useEffect(() => {
+    if (position) {
+      setFormData(prev => ({
+        ...prev,
+        message: `Application for ${position}\n\n`,
+      }));
+      
+      // Scroll to form smoothly after a short delay to ensure rendering is complete
+      setTimeout(() => {
+        const applySection = document.getElementById('apply');
+        if (applySection) {
+          applySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, [position]);
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
@@ -92,8 +114,9 @@ export default function CVSubmissionForm() {
         message: 'Your CV has been submitted successfully! We\'ll be in touch soon.',
       });
       
-      // Reset form
-      setFormData({ name: '', email: '', phone: '', message: '' });
+      // Reset form with pre-filled position message if applicable
+      const initialMessage = position ? `Application for ${position}\n\n` : '';
+      setFormData({ name: '', email: '', phone: '', message: initialMessage });
       setCvFile(null);
       // Reset file input
       const fileInput = document.getElementById('cv') as HTMLInputElement;

@@ -1,5 +1,6 @@
 import { getJobs } from "../../../lib/content";
 import { notFound } from "next/navigation";
+import Link from 'next/link';
 
 export async function generateStaticParams() {
   const jobs = await getJobs();
@@ -37,12 +38,12 @@ export default async function JobDetail({ params }: { params: { slug: string } }
         )}
       </div>
       <div className="mt-10">
-        <a
-          href={`mailto:${job.applyEmail || "info.thecollectivecounsel@gmail.com"}`}
+        <Link
+          href={`/careers?position=${encodeURIComponent(job.title)}#apply`}
           className="btn"
         >
-          Apply via Email
-        </a>
+          Apply Now
+        </Link>
       </div>
     </div>
   );

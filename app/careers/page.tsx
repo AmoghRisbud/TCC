@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 import SectionHeading from '../components/SectionHeading';
 import { getJobs } from '../../lib/content';
 import CVSubmissionForm from './CVSubmissionForm';
@@ -139,7 +140,7 @@ export default async function CareersPage() {
       </section>
 
       {/* Contact CTA */}
-      <section className="section bg-white">
+      <section id="apply" className="section bg-white">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <h2 className="h2 mb-6 text-brand-dark">Interested in Working With Us?</h2>
@@ -147,7 +148,9 @@ export default async function CareersPage() {
               Send your CV and a brief introduction. We&apos;ll reach out when opportunities arise.
             </p>
           </div>
-          <CVSubmissionForm />
+          <Suspense fallback={<div className="text-center py-12">Loading form...</div>}>
+            <CVSubmissionForm />
+          </Suspense>
         </div>
       </section>
     </div>

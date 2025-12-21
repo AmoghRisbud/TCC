@@ -23,6 +23,7 @@ interface Program {
   startDate?: string;
   endDate?: string;
   fee?: string;
+  enrollmentFormUrl?: string;
   duration?: string;
   logo?: string;
 }
@@ -36,6 +37,7 @@ const emptyProgram: Program = {
   startDate: '',
   endDate: '',
   fee: '',
+  enrollmentFormUrl: '',
   duration: '',
   logo: '',
 };
@@ -310,6 +312,10 @@ export default function AdminProgramsManager() {
                 <div>
                   <label className="block text-sm font-medium text-brand-dark mb-1">Fee</label>
                   <input type="text" value={formData.fee} onChange={e => setFormData(p => ({ ...p, fee: e.target.value }))} className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" placeholder="e.g., ₹50,000" />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-brand-dark mb-1">Enrollment Form URL</label>
+                  <input type="url" value={formData.enrollmentFormUrl} onChange={e => setFormData(p => ({ ...p, enrollmentFormUrl: e.target.value }))} className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" placeholder="https://forms.google.com/..." />
                 </div>
               </div>
 

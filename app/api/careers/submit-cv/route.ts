@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../lib/auth';
+import { getEmailTransporter, verifyEmailConnection } from '../../../../lib/email';
 
-// Email service configuration
-// In production, you would use a service like SendGrid, Resend, or Nodemailer
-// For now, this returns success and you can integrate your preferred email service
+// Email service configuration - Production Nodemailer with Gmail SMTP
+// Requires EMAIL_USER and EMAIL_PASSWORD environment variables
 
 export async function POST(req: NextRequest) {
   try {
@@ -131,59 +131,51 @@ export async function POST(req: NextRequest) {
       ],
     };
 
-    // TODO: Integrate with your email service here
-    // Example with Resend (npm install resend):
-    /*
-    import { Resend } from 'resend';
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    
-    await resend.emails.send({
-      from: 'careers@yourdomain.com',
-      to: emailContent.to,
-      subject: emailContent.subject,
-      html: emailContent.html,
-      attachments: emailContent.attachments,
-    });
-    */
+    // Verify email service is available before attempting to send
+    const emailServiceReady = await verifyEmailConnection();
+    if (!emailServiceReady) {
+      console.error('Email service unavailable - CV submission cannot be processed');
+      return NextResponse.json(
+        { error: 'Email service temporarily unavailable. Please try again later.' },
+        { status: 503 } // Service Unavailable
+      );
+    }
 
-    // Example with Nodemailer:
-    /*
-    import nodemailer from 'nodemailer';
-    
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD, // Use app-specific password
-      },
-    });
-    
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: emailContent.to,
-      subject: emailContent.subject,
-      html: emailContent.html,
-      attachments: emailContent.attachments,
-    });
-    */
+    // Send email with CV attachment using Nodemailer
+    try {
+      const transporter = getEmailTransporter();
+      
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: emailContent.to,
+        subject: emailContent.subject,
+        html: emailContent.html,
+        attachments: emailContent.attachments,
+      });
 
-    // For now, log the submission (in production, remove this and use actual email service)
-    console.log('CV Submission Received:', {
-      name,
-      email,
-      phone,
-      fileName: cvFile.name,
-      fileSize: cvFile.size,
-      timestamp: new Date().toISOString(),
-    });
+      // Log successful submission
+      console.log('✅ CV submission email sent successfully:', {
+        name,
+        email,
+        phone,
+        fileName: cvFile.name,
+        fileSize: cvFile.size,
+        timestamp: new Date().toISOString(),
+      });
 
-    // In production, uncomment the email sending code above and remove this mock response
-    // For development, we'll simulate success
-    return NextResponse.json({
-      success: true,
-      message: 'CV submitted successfully',
-      data: { name, email },
-    });
+      return NextResponse.json({
+        success: true,
+        message: 'CV submitted successfully',
+        data: { name, email },
+      });
+
+    } catch (emailError) {
+      console.error('❌ Failed to send CV submission email:', emailError);
+      return NextResponse.json(
+        { error: 'Failed to send email. Please try again later or contact us directly.' },
+        { status: 503 } // Service Unavailable
+      );
+    }
 
   } catch (error) {
     console.error('Error processing CV submission:', error);

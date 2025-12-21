@@ -95,15 +95,17 @@ export default async function ProgramDetail({ params }: { params: { slug: string
             </ul>
 
             {/* CTA */}
-            {program.ctaUrl && (
-              <Link
-                href={program.ctaUrl}
+            {(program.enrollmentFormUrl || program.ctaUrl) && (
+              <a
+                href={program.enrollmentFormUrl || program.ctaUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-6 inline-flex w-full justify-center items-center
                            px-5 py-3 rounded-lg bg-brand-primary text-white
                            font-semibold hover:bg-brand-accent transition"
               >
-                {program.ctaLabel || 'Apply Now'}
-              </Link>
+                {program.enrollmentFormUrl ? 'Enroll' : (program.ctaLabel || 'Apply Now')}
+              </a>
             )}
           </aside>
         </div>
