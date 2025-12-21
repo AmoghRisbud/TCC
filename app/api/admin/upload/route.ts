@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
+import { v2 as cloudinary } from 'cloudinary';
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,29 +35,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File size must be less than 5MB' }, { status: 400 });
     }
 
-    // Generate unique filename
+    // Convert file to base64 for Cloudinary upload
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    
-    const timestamp = Date.now();
-    const fileExtension = file.name.split('.').pop();
-    const fileName = `${timestamp}-${Math.random().toString(36).substring(7)}.${fileExtension}`;
-    
-    // Create directory if it doesn't exist
-    const uploadDir = path.join(process.cwd(), 'public', 'images', category);
-    await mkdir(uploadDir, { recursive: true });
-    
-    // Write file
-    const filePath = path.join(uploadDir, fileName);
-    await writeFile(filePath, new Uint8Array(buffer));
-    
-    // Return the public URL
-    const publicUrl = `/images/${category}/${fileName}`;
+    const base64Image = `data:${file.type};base64,${buffer.toString('base64')}`;
+
+    // Upload to Cloudinary
+    const uploadResult = await cloudinary.uploader.upload(base64Image, {
+      folder: `tcc/${category}`, // Organize by category in Cloudinary
+      resource_type: 'image',
+      transformation: [
+        { width: 1200, crop: 'limit' }, // Max width 1200px
+        { quality: 'auto' }, // Auto quality optimization
+        { fetch_format: 'auto' }, // Auto format (WebP if supported)
+      ],
+    });
+
+    // Return the Cloudinary URL
+    const publicUrl = uploadResult.secure_url;
     
     return NextResponse.json({ 
       success: true, 
       url: publicUrl,
-      message: 'File uploaded successfully'
+      message: 'File uploaded successfully to Cloudinary',
+      cloudinary_id: uploadResult.public_id, // Save this if you want to delete later
     });
     
   } catch (error) {
