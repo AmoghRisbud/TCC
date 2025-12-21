@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "dotenv": "^17.2.3",
+    "gray-matter": "4.0.3",
     "ioredis": "^5.8.2",
     "next": "^14.2.35",
     "next-auth": "^4.24.13",
@@ -29,7 +30,6 @@
     "autoprefixer": "10.4.16",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.0.10",
-    "gray-matter": "4.0.3",
     "postcss": "8.4.31",
     "prettier": "^3.7.4",
     "remark": "15.0.0",
