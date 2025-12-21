@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const nextConfig = {
   reactStrictMode: true,
   // Use standalone output for Docker, but not for Vercel
@@ -18,6 +24,12 @@ const nextConfig = {
 
   // Webpack configuration for module resolution
   webpack: (config, { isServer }) => {
+    // Add path alias resolution
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': __dirname,
+    };
+
     // Ensure proper module resolution for ioredis
     if (isServer) {
       config.externals = config.externals || [];
