@@ -121,7 +121,7 @@ export default async function HomePage() {
                 {announcements.map((a) => (
                   <Link
                     key={a.id}
-                    href={`/announcements/${a.slug}`}
+                    href="/announcements"
                     className="flex items-center gap-4 group"
                   >
                     <div className="relative w-24 h-14 rounded-lg overflow-hidden shadow-sm border bg-white">

@@ -8,12 +8,12 @@ import { Announcement } from "../../lib/types";
 export default function AnnouncementsPage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useEffect(() => {
     fetch('/api/announcements')
       .then(res => res.json())
       .then(data => {
-        // Ensure data is an array
         const announcementsArray = Array.isArray(data) ? data : [];
         setAnnouncements(announcementsArray);
         setLoading(false);
@@ -24,10 +24,6 @@ export default function AnnouncementsPage() {
         setLoading(false);
       });
   }, []);
-
-  // Modal state
-  const [activeImage, setActiveImage] = useState<string | null>(null);
-  const [activeTitle, setActiveTitle] = useState<string>("");
 
   return (
     <section className="section bg-brand-light">
@@ -50,86 +46,72 @@ export default function AnnouncementsPage() {
             {Array.isArray(announcements) && announcements.map((a) => (
             <div
               key={a.id}
-              className="
-                flex gap-6
-                bg-white rounded-xl
-                border shadow-sm
-                hover:shadow-md
-                transition
-                overflow-hidden
-              "
+              className="bg-white rounded-xl border shadow-sm overflow-hidden"
             >
-              {/* IMAGE (clickable) */}
+              {/* Clickable Card */}
               <button
-                onClick={() => {
-                  setActiveImage(a.image);
-                  setActiveTitle(a.title);
-                }}
-                className="relative w-40 h-24 shrink-0 focus:outline-none"
+                onClick={() => setExpandedId(expandedId === a.id ? null : a.id)}
+                className="w-full flex gap-6 p-4 hover:bg-gray-50 transition text-left"
               >
-                <Image
-                  src={a.image}
-                  alt={a.title}
-                  fill
-                  className="object-cover hover:scale-105 transition"
-                />
+                {/* IMAGE */}
+                <div className="relative w-40 h-24 shrink-0 rounded-lg overflow-hidden">
+                  <Image
+                    src={a.image}
+                    alt={a.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
+                {/* CONTENT */}
+                <div className="flex flex-col justify-center flex-1">
+                  <h3 className="text-lg font-semibold text-brand-dark group-hover:text-brand-primary">
+                    {a.title}
+                  </h3>
+                  <p className="text-sm text-brand-muted mt-1 line-clamp-2">
+                    {a.description}
+                  </p>
+                  <span className="text-xs text-brand-muted mt-2">{a.date}</span>
+                </div>
+
+                {/* Expand Icon */}
+                <div className="flex items-center">
+                  <svg
+                    className={`w-6 h-6 text-brand-muted transition-transform ${
+                      expandedId === a.id ? 'rotate-180' : ''
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
               </button>
 
-              {/* CONTENT — height matches image */}
-              <div className="flex flex-col justify-center py-3 pr-4">
-                <h3 className="text-lg font-semibold text-brand-dark">
-                  {a.title}
-                </h3>
-                <p className="text-sm text-brand-muted mt-1 line-clamp-2">
-                  {a.description}
-                </p>
-                <span className="text-xs text-brand-muted mt-2">{a.date}</span>
-              </div>
+              {/* Expanded Content */}
+              {expandedId === a.id && (
+                <div className="border-t p-6 bg-gray-50 animate-fade-in">
+                  <div className="relative w-full h-96 mb-4 rounded-lg overflow-hidden">
+                    <Image
+                      src={a.image}
+                      alt={a.title}
+                      fill
+                      className="object-contain bg-white"
+                    />
+                  </div>
+                  <div className="prose max-w-none">
+                    <p className="text-brand-muted text-base leading-relaxed">
+                      {a.description}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
         )}
       </div>
-
-      {/* IMAGE MODAL */}
-      {activeImage && (
-        <div
-          className="
-            fixed inset-0 z-50
-            flex items-center justify-center
-            bg-black/70 backdrop-blur-sm
-          "
-          onClick={() => setActiveImage(null)}
-        >
-          <div
-            className="relative max-w-4xl w-full mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setActiveImage(null)}
-              className="
-                absolute -top-10 right-0
-                text-white text-3xl font-bold
-                hover:opacity-80
-              "
-              aria-label="Close"
-            >
-              ×
-            </button>
-
-            {/* Image */}
-            <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black">
-              <Image
-                src={activeImage}
-                alt={activeTitle}
-                fill
-                className="object-contain"
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
