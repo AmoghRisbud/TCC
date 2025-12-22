@@ -48,7 +48,7 @@ export default async function ProgramsPage() {
                   <div className="flex flex-col items-center">
                     {/* Logo */}
                     <div
-                      className="mb-5 w-24 h-24 rounded-2xl bg-white border border-brand-primary/10
+                      className="mb-5 w-32 h-32 rounded-2xl bg-white border border-brand-primary/10
                                    flex items-center justify-center shadow-md
                                    group-hover:shadow-lg group-hover:border-brand-primary/30
                                    transition-all duration-300"
@@ -57,9 +57,9 @@ export default async function ProgramsPage() {
                         <Image
                           src={p.logo}
                           alt={`${p.title} logo`}
-                          width={80}
-                          height={80}
-                          className="object-contain"
+                          width={112}
+                          height={112}
+                          className="object-contain p-2"
                         />
                       )}
                     </div>

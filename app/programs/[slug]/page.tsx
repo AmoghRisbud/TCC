@@ -37,6 +37,12 @@ export default async function ProgramDetail({ params }: { params: { slug: string
 
           <h1 className="h1 mb-4">{program.title}</h1>
 
+          {program.shortDescription && (
+            <p className="text-lg text-white/80 max-w-2xl mx-auto break-words mb-6">
+              {program.shortDescription}
+            </p>
+          )}
+
           {/* Badges */}
           <div className="flex flex-wrap justify-center gap-3 mt-6">
             {program.featured && (
@@ -57,17 +63,6 @@ export default async function ProgramDetail({ params }: { params: { slug: string
           </div>
         </div>
       </section>
-
-      {/* Short Description */}
-      {program.shortDescription && (
-        <section className="section bg-white border-b">
-          <div className="container max-w-4xl">
-            <p className="text-lg text-brand-dark leading-relaxed text-center max-w-3xl mx-auto">
-              {program.shortDescription}
-            </p>
-          </div>
-        </section>
-      )}
 
       {/* CONTENT */}
       <section className="section bg-brand-light">

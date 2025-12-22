@@ -5,6 +5,17 @@ import { Job } from '@/lib/types';
 
 const REDIS_KEY = 'tcc:careers';
 
+// Helper function to generate URL-friendly slug from title
+const generateSlug = (title: string): string => {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
 // GET all jobs or a single job by slug
 export async function GET(request: NextRequest) {
   try {
@@ -20,7 +31,22 @@ export async function GET(request: NextRequest) {
       return NextResponse.json([]);
     }
 
-    const jobs: Job[] = JSON.parse(data);
+    let jobs: Job[] = JSON.parse(data);
+    
+    // Auto-fix: Generate slugs for jobs that don't have them
+    let needsUpdate = false;
+    jobs = jobs.map(job => {
+      if (!job.slug && job.title) {
+        needsUpdate = true;
+        return { ...job, slug: generateSlug(job.title) };
+      }
+      return job;
+    });
+    
+    // Save back to Redis if we fixed any slugs
+    if (needsUpdate) {
+      await redis.set(REDIS_KEY, JSON.stringify(jobs));
+    }
     
     // Check if a specific job is requested
     const { searchParams } = new URL(request.url);
