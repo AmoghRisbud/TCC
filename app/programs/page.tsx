@@ -38,76 +38,71 @@ export default async function ProgramsPage() {
                 className="group block"
               >
                 <div
-                  className="card-interactive aspect-square flex flex-col items-center justify-between p-6 text-center
+                  className="card-interactive flex flex-col h-full
                             bg-gradient-to-br from-white via-white to-brand-light/40
                             border border-brand-primary/10
                             shadow-sm hover:shadow-xl hover:-translate-y-1
-                            transition-all duration-300"
+                            transition-all duration-300 overflow-hidden"
                 >
-                  {/* Top Content */}
-                  <div className="flex flex-col items-center">
-                    {/* Logo */}
-                    <div
-                      className="mb-5 w-32 h-32 rounded-2xl bg-white border border-brand-primary/10
-                                   flex items-center justify-center shadow-md
-                                   group-hover:shadow-lg group-hover:border-brand-primary/30
-                                   transition-all duration-300"
-                    >
-                      {p.logo && (
-                        <Image
-                          src={p.logo}
-                          alt={`${p.title} logo`}
-                          width={112}
-                          height={112}
-                          className="object-contain p-2"
-                        />
-                      )}
+                  {/* Logo Image - Full Width */}
+                  {p.logo && (
+                    <div className="mb-4 overflow-hidden">
+                      <Image
+                        src={p.logo}
+                        alt={`${p.title} logo`}
+                        width={400}
+                        height={200}
+                        className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
                     </div>
+                  )}
 
+                  {/* Content */}
+                  <div className="flex flex-col flex-1 p-6 pt-0">
                     {/* Title */}
                     <h3 className="h3 mb-2 group-hover:text-brand-primary transition-colors">
                       {p.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-brand-muted text-sm leading-relaxed line-clamp-3 mb-3 break-words overflow-hidden">
+                    <p className="text-brand-muted text-sm leading-relaxed line-clamp-3 mb-6 break-words overflow-hidden flex-1">
                       {p.shortDescription}
                     </p>
-                  </div>
 
-                  {/* Bottom CTA */}
-                  <div className="flex flex-col items-center gap-3 mb-2">
-                    {/* Apply Now Button */}
-                    <span
-                      className="inline-flex items-center justify-center px-5 py-2 rounded-lg
-                                bg-brand-primary text-white text-sm font-semibold
-                                shadow-md hover:bg-brand-accent hover:shadow-lg
-                                transition-all -mt-1"
-                    >
-                      Apply Now
-                    </span>
-
-                    {/* View Details */}
-                    <span
-                      className="inline-flex items-center gap-2 text-brand-primary text-sm font-medium
-                                    group-hover:gap-3 transition-all"
-                    >
-                      View Details
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
+                    {/* Bottom CTA */}
+                    <div className="flex flex-col items-center gap-3">
+                      {/* Apply Now Button */}
+                      <span
+                        className="inline-flex items-center justify-center px-5 py-2 rounded-lg
+                                  bg-brand-primary text-white text-sm font-semibold
+                                  shadow-md hover:bg-brand-accent hover:shadow-lg
+                                  transition-all w-full"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </span>
+                        Apply Now
+                      </span>
+
+                      {/* View Details */}
+                      <span
+                        className="inline-flex items-center gap-2 text-brand-primary text-sm font-medium
+                                      group-hover:gap-3 transition-all"
+                      >
+                        View Details
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </span>
+                    </div>
                   </div>
                 </div>
               </Link>
