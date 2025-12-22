@@ -130,7 +130,7 @@ const peopleGroups = [
       },
       {
         name: "Ms. Nishtha Sofat",
-        designation: "",
+        designation: "Community & Growth manager",
         image: "/images/counsel/Nishtha.JPEG",
       },
       {
@@ -166,7 +166,7 @@ const peopleGroups = [
     members: [
       {
         name: "Adv. Nisarg J Desai",
-        designation: "Standing Counsel – Income Tax Department",
+        designation: "Standing Counsel, Income Tax Department (CBDT)",
         image: "/images/counsel/Nisarg.jpeg",
       },
       {
