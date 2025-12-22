@@ -3,6 +3,17 @@
 import React from 'react';
 import { Job } from '@/lib/types';
 
+// Helper function to generate URL-friendly slug from title
+const generateSlug = (title: string): string => {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
 const emptyJob: Job = {
   slug: '',
   title: '',
@@ -100,6 +111,7 @@ export default function AdminCareersManager() {
       // Process array inputs
       const processedData = {
         ...formData,
+        slug: modalMode === 'add' ? generateSlug(formData.title) : formData.slug,
         requirements: requirementsInput.split('\n').filter(line => line.trim() !== ''),
         responsibilities: responsibilitiesInput.split('\n').filter(line => line.trim() !== '')
       };

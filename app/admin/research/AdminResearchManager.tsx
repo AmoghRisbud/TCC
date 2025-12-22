@@ -4,6 +4,7 @@ import React from 'react';
 import { Research } from '@/lib/types';
 import ImageUpload from '../components/ImageUpload';
 import PDFUpload from '../components/PDFUpload';
+import RichTextEditor from '../components/RichTextEditor';
 
 // Helper function to generate URL-friendly slug from title
 const generateSlug = (title: string): string => {
@@ -198,7 +199,12 @@ export default function AdminResearchManager() {
                   </div>
                   <div className="col-span-2">
                     <label className="block text-sm font-medium text-brand-dark mb-1">Content</label>
-                    <textarea rows={6} value={formData.content || ''} onChange={e => setFormData(p => ({ ...p, content: e.target.value }))} className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" placeholder="Full article content..." />
+                    <RichTextEditor 
+                      value={formData.content || ''} 
+                      onChange={(value) => setFormData(p => ({ ...p, content: value }))} 
+                      placeholder="Full article content..." 
+                      height="300px"
+                    />
                   </div>
                 </div>
 

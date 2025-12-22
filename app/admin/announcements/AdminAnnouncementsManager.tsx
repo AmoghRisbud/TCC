@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ImageUpload from '../components/ImageUpload';
+import RichTextEditor from '../components/RichTextEditor';
 
 // Helper function to generate URL-friendly slug from title
 const generateSlug = (title: string): string => {
@@ -236,12 +237,11 @@ export default function AdminAnnouncementsManager() {
                 <label className="block text-sm font-medium text-brand-dark mb-1">
                   Description
                 </label>
-                <textarea
-                  rows={4}
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-brand-primary"
-                  placeholder="Brief description of the announcement..."
+                <RichTextEditor 
+                  value={formData.description} 
+                  onChange={(value) => setFormData({ ...formData, description: value })} 
+                  placeholder="Brief description of the announcement..." 
+                  height="200px"
                 />
               </div>
 

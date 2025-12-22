@@ -348,9 +348,10 @@ export default async function HomePage() {
                 </svg>
 
                 {/* Quote */}
-                <p className="text-brand-dark leading-relaxed mb-4 italic line-clamp-5">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
+                <div 
+                  className="text-brand-dark leading-relaxed mb-4 italic line-clamp-5 prose prose-sm max-w-none"
+                  dangerouslySetInnerHTML={{ __html: t.quote }}
+                />
 
                 {/* Optional "Read more" hint */}
                 {t.quote.length > 250 && (

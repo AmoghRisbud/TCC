@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ImageUpload from '../components/ImageUpload';
+import RichTextEditor from '../components/RichTextEditor';
 
 // Helper function to generate URL-friendly slug from title
 const generateSlug = (title: string): string => {
@@ -18,6 +19,7 @@ interface Program {
   slug: string;
   title: string;
   shortDescription: string;
+  fullDescription?: string;
   mode?: string;
   location?: string;
   startDate?: string;
@@ -32,6 +34,7 @@ const emptyProgram: Program = {
   slug: '',
   title: '',
   shortDescription: '',
+  fullDescription: '',
   mode: 'Online',
   location: '',
   startDate: '',
@@ -260,7 +263,16 @@ export default function AdminProgramsManager() {
                 </div>
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-brand-dark mb-1">Short Description</label>
-                  <textarea rows={2} value={formData.shortDescription} onChange={e => setFormData(p => ({ ...p, shortDescription: e.target.value }))} className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary resize-none" placeholder="Brief description" />
+                  <textarea rows={2} value={formData.shortDescription} onChange={e => setFormData(p => ({ ...p, shortDescription: e.target.value }))} className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary resize-none" placeholder="Brief description (shown below title)" />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-brand-dark mb-1">Program Overview</label>
+                  <RichTextEditor 
+                    value={formData.fullDescription || ''} 
+                    onChange={(value) => setFormData(p => ({ ...p, fullDescription: value }))} 
+                    placeholder="Detailed program overview (shown in the main content area)" 
+                    height="250px"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-brand-dark mb-1">Mode</label>

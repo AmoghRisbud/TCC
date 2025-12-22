@@ -129,3 +129,76 @@ button:focus-visible {
     var(--brand-gold) 100%
   );
 }
+
+/* Rich Text Editor Styles */
+.rich-text-editor {
+  @apply mb-4;
+}
+
+.rich-text-editor .ql-container {
+  @apply border-gray-200 rounded-b-lg;
+  font-family: inherit;
+}
+
+.rich-text-editor .ql-toolbar {
+  @apply border-gray-200 rounded-t-lg bg-gray-50;
+}
+
+.rich-text-editor .ql-editor {
+  @apply min-h-[150px];
+  font-size: 14px;
+}
+
+.rich-text-editor .ql-editor.ql-blank::before {
+  @apply text-gray-400 italic;
+}
+
+/* Prose styling for rendered HTML content */
+.prose {
+  @apply text-brand-muted;
+}
+
+.prose p {
+  @apply mb-4;
+}
+
+.prose strong {
+  @apply font-semibold text-brand-dark;
+}
+
+.prose em {
+  @apply italic;
+}
+
+.prose ul {
+  @apply list-disc ml-6 mb-4;
+}
+
+.prose ol {
+  @apply list-decimal ml-6 mb-4;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose h1, .prose h2, .prose h3 {
+  @apply font-semibold text-brand-dark mb-3 mt-6;
+}
+
+.prose h1 {
+  @apply text-2xl;
+}
+
+.prose h2 {
+  @apply text-xl;
+}
+
+.prose h3 {
+  @apply text-lg;
+}
+
+.prose a {
+  @apply text-brand-primary underline hover:text-brand-accent;
+}
+

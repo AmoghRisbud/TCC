@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ImageUpload from '../components/ImageUpload';
+import RichTextEditor from '../components/RichTextEditor';
 
 // Helper function to generate URL-friendly ID from name
 const generateId = (name: string): string => {
@@ -195,7 +196,12 @@ export default function AdminTestimonialsManager() {
                 </div>
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-brand-dark mb-1">Quote *</label>
-                  <textarea rows={3} required value={formData.quote} onChange={e => setFormData(p => ({ ...p, quote: e.target.value }))} className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary resize-none" placeholder="Their testimonial..." />
+                  <RichTextEditor 
+                    value={formData.quote} 
+                    onChange={(value) => setFormData(p => ({ ...p, quote: value }))} 
+                    placeholder="Their testimonial..." 
+                    height="200px"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-brand-dark mb-1">Role</label>
