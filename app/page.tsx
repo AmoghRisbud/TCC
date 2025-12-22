@@ -4,6 +4,10 @@ import { getPrograms, getTestimonials, getGallery } from "../lib/content";
 import Image from "next/image";
 import { getAnnouncements } from "../lib/announcements";
 
+// Force dynamic rendering to always fetch fresh announcements
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function HomePage() {
   const announcements = await getAnnouncements();
   const allPrograms = await getPrograms();
@@ -13,7 +17,12 @@ export default async function HomePage() {
 
   // Prioritize featured testimonials, fall back to first 3 if none are featured
   const testimonials = allTestimonials
-    .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
+    .sort((a, b) => {
+      // Convert to boolean to handle string 'true'/'false' from Redis
+      const aFeatured = a.featured === true || (a.featured as any) === 'true';
+      const bFeatured = b.featured === true || (b.featured as any) === 'true';
+      return (bFeatured ? 1 : 0) - (aFeatured ? 1 : 0);
+    })
     .slice(0, 3);
 
   // Duplicate gallery for seamless marquee

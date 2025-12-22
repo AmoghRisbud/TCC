@@ -124,6 +124,26 @@ export default function ResearchPage() {
                   <h3 className="h3 mb-3 text-brand-dark group-hover:text-brand-primary transition-colors">
                     {p.title}
                   </h3>
+                  
+                  {p.author && (
+                    <p className="text-sm text-brand-primary font-medium mb-3 flex items-center gap-2">
+                      <svg 
+                        className="w-4 h-4" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" 
+                        />
+                      </svg>
+                      {p.author}
+                    </p>
+                  )}
+                  
                   <p className="text-brand-muted mb-6 leading-relaxed flex-1">
                     {p.summary}
                   </p>
