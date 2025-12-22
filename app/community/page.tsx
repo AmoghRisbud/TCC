@@ -81,7 +81,7 @@ export default function CommunityPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="h1 mb-6">Join the Community</h1>
             <p className="text-xl text-white/80 leading-relaxed">
-              Connect with fellow law students, educators, and legal professionals. Choose your
+              Connect with fellow law students, educators, mentors and legal professionals. Choose your
               preferred platform to stay connected.
             </p>
           </div>

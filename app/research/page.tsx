@@ -81,9 +81,9 @@ export default function ResearchPage() {
       <section className="section bg-brand-hero text-white">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="h1 mb-6">Our Proof of Concept</h1>
+            <h1 className="h2 mb-6">The Collective Counsel Law Review</h1>
             <p className="text-xl text-white/80 leading-relaxed">
-              Discover the impact we&apos;ve made through our wide research.
+              Advancing Scholar Research through editorial excellence and academic integrity.
             </p>
           </div>
         </div>

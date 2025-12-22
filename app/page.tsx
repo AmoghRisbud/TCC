@@ -26,15 +26,14 @@ export default async function HomePage() {
         <div className="container relative py-24 md:py-32 lg:py-40">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="h1 text-white mb-6 animate-fade-in">
-              Helping Law Students Find{" "}
+              Helping Law Students and Legal Professionals Find{" "}
               <span className="text-brand-secondary">Clarity</span>,{" "}
               <span className="text-brand-secondary">Skills</span> &{" "}
               <span className="text-brand-secondary">Direction</span>
             </h1>
 
             <p className="text-xl md:text-2xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in">
-              Join a community-led legal education ecosystem designed to empower
-              the next generation of legal professionals.
+              Join a community-led upskilling ecosystem designed to empower the next generation of legal professionals.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up">

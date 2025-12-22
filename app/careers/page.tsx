@@ -42,8 +42,7 @@ export default async function CareersPage() {
                 <div className="mt-3 h-1 w-12 rounded-full bg-brand-primary/70" />
 
                 <p className="mt-4 text-base text-gray-600 leading-relaxed max-w-md">
-                  Work with our internal team to build programs, manage
-                  communities, and scale legal education initiatives.
+                 Work at the core of The Collective Counsel, building programs, communities and initiatives shaping the next generation of legal upskilling.
                 </p>
               </div>
 
@@ -95,8 +94,7 @@ export default async function CareersPage() {
                 <div className="mt-3 h-1 w-12 rounded-full bg-brand-accent/70" />
 
                 <p className="mt-4 text-base text-gray-600 leading-relaxed max-w-md">
-                  Explore internships, fellowships, and legal career
-                  opportunities shared by our extended network.
+                  Explore Curated internships, fellowships and early career legal opportunities shared through our trusted & reputed Network.
                 </p>
               </div>
 

@@ -83,22 +83,22 @@ const peopleGroups = [
       },
       {
         name: "Mr. Akhilesh Khadtare",
-        designation: "Co-Founder – Funding",
+        designation: "Co-Founder , Sales and Marketing",
         image: "/images/counsel/Akhilesh.JPG",
       },
       {
         name: "Ms. Lavanya Gupta",
-        designation: "Co-Founder – Compliance",
+        designation: "Co-Founder , Compliance",
         image: "/images/counsel/Lavnya.JPG",
       },
       {
         name: "Adv. Varsha Kamble",
-        designation: "Co-Founder – Relations",
+        designation: "Co-Founder , Relations",
         image: "/images/counsel/Varsha.JPG",
       },
       {
-        name: "Shubham vengurlekar",
-        designation: "Co-Founder – Tech",
+        name: "Shubham Vengurlekar",
+        designation: "Co-Founder , Tech",
         image: "/images/counsel/ShubhamV.JPG",
       },
       {
