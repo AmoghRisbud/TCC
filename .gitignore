@@ -6,3 +6,7 @@ node_modules
 /dist
 content/**/*.tmp
 tsconfig.tsbuildinfo
+
+# Redis backups (contain sensitive data)
+backups/
+*.backup.json

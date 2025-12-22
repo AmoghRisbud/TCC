@@ -15,15 +15,13 @@ export default async function HomePage() {
   const allTestimonials = await getTestimonials();
   const gallery = await getGallery();
 
-  // Prioritize featured testimonials, fall back to first 3 if none are featured
-  const testimonials = allTestimonials
-    .sort((a, b) => {
-      // Convert to boolean to handle string 'true'/'false' from Redis
-      const aFeatured = a.featured === true || (a.featured as any) === 'true';
-      const bFeatured = b.featured === true || (b.featured as any) === 'true';
-      return (bFeatured ? 1 : 0) - (aFeatured ? 1 : 0);
-    })
-    .slice(0, 3);
+  // Show only featured testimonials if any exist, otherwise show first 3
+  const featuredTestimonials = allTestimonials.filter(t => 
+    t.featured === true || (t.featured as any) === 'true'
+  );
+  const testimonials = featuredTestimonials.length > 0 
+    ? featuredTestimonials.slice(0, 3)
+    : allTestimonials.slice(0, 3);
 
   // Duplicate gallery for seamless marquee
   const scrollingGallery = [...gallery, ...gallery];
