@@ -5,11 +5,7 @@ import Link from 'next/link';
 // Force dynamic rendering to always fetch fresh data from Redis
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-
-export async function generateStaticParams() {
-  const jobs = await getJobs();
-  return jobs.map(j => ({ slug: j.slug }));
-}
+export const dynamicParams = true;
 
 export default async function JobDetail({ params }: { params: { slug: string } }) {
   const jobs = await getJobs();

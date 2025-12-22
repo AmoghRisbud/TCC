@@ -6,11 +6,7 @@ import { notFound } from 'next/navigation';
 // Force dynamic rendering to always fetch fresh data from Redis
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-
-export async function generateStaticParams() {
-  const programs = await getPrograms();
-  return programs.map((p) => ({ slug: p.slug }));
-}
+export const dynamicParams = true;
 
 export default async function ProgramDetail({ params }: { params: { slug: string } }) {
   const programs = await getPrograms();
