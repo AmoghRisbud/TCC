@@ -23,6 +23,15 @@ export default async function HomePage() {
     ? featuredTestimonials.slice(0, 3)
     : allTestimonials.slice(0, 3);
 
+  // Helper to strip HTML and collapse whitespace (server-side safe)
+  const stripHtml = (html?: string) => {
+    if (!html) return '';
+    return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  };
+
+  // Duplicate testimonials to create a seamless horizontal marquee
+  const scrollingTestimonials = [...testimonials, ...testimonials];
+
   // Duplicate gallery for seamless marquee
   const scrollingGallery = [...gallery, ...gallery];
 
@@ -322,62 +331,62 @@ export default async function HomePage() {
             subtitle="Hear from students and educators who have been part of our journey."
           />
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((t) => (
-              <div
-                key={t.id}
-                className="card relative
-                     bg-gradient-to-br
-                     from-[#F8F6EE]
-                     via-[#F1F4EF]
-                     to-[#FBFAF6]
-                     ring-1 ring-black/10
-                     shadow-md
-                     hover:-translate-y-1 hover:shadow-xl
-                     transition-all duration-300
-                     flex flex-col"
-              >
-                {/* Quote icon */}
-                <svg
-                  className="absolute top-4 right-4 w-8 h-8 text-brand-primary/20"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
+          <div className="relative mt-6 overflow-hidden">
+            {/* Left/right fade for nicer visual */}
+            <div className="absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-brand-light to-transparent z-10" />
+            <div className="absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-brand-light to-transparent z-10" />
 
-                {/* Quote */}
-                <div 
-                  className="text-brand-dark leading-relaxed mb-4 italic line-clamp-5 prose prose-sm max-w-none"
-                  dangerouslySetInnerHTML={{ __html: t.quote }}
-                />
+            <div className="flex w-max gap-6 animate-marquee hover:[animation-play-state:paused]">
+              {scrollingTestimonials.map((t, idx) => {
+                const plain = stripHtml(t.quote);
+                return (
+                  <div
+                    key={`${t.id}-${idx}`}
+                    className="mx-4 w-80 shrink-0
+                      bg-gradient-to-br
+                      from-[#F8F6EE]
+                      via-[#F1F4EF]
+                      to-[#FBFAF6]
+                      ring-1 ring-black/10
+                      shadow-md
+                      hover:-translate-y-1 hover:shadow-xl
+                      transition-all duration-300
+                      flex flex-col p-4"
+                  >
+                    {/* Quote icon */}
+                    <svg
+                      className="absolute top-4 right-4 w-8 h-8 text-brand-primary/20"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                    </svg>
 
-                {/* Optional "Read more" hint */}
-                {t.quote.length > 250 && (
-                  <span className="text-sm text-brand-primary font-medium">
-                    Read more
-                  </span>
-                )}
+                    {/* Quote as plain text */}
+                    <p className="text-brand-dark leading-relaxed mb-4 italic line-clamp-5 prose-sm max-w-none">{plain}</p>
 
-                <div className="flex-grow" />
-
-                {/* Author */}
-                <div className="flex items-center gap-3 pt-4 mt-4 border-t border-gray-100">
-                  <div className="w-10 h-10 bg-brand-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-brand-primary font-semibold">
-                      {t.name.charAt(0)}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-brand-dark">{t.name}</p>
-                    {t.role && (
-                      <p className="text-sm text-brand-muted">{t.role}</p>
+                    {/* Optional "Read more" hint */}
+                    {plain.length > 250 && (
+                      <span className="text-sm text-brand-primary font-medium">Read more</span>
                     )}
+
+                    <div className="flex-grow" />
+
+                    {/* Author */}
+                    <div className="flex items-center gap-3 pt-4 mt-4 border-t border-gray-100">
+                      <div className="w-10 h-10 bg-brand-primary/10 rounded-full flex items-center justify-center">
+                        <span className="text-brand-primary font-semibold">{t.name.charAt(0)}</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-brand-dark">{t.name}</p>
+                        {t.role && <p className="text-sm text-brand-muted">{t.role}</p>}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                );
+              })}
+            </div>
           </div>
 
           <div className="text-center mt-10">
