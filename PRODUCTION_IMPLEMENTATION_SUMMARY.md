@@ -122,6 +122,9 @@ ADMIN_EMAILS=info.thecollectivecounsel@gmail.com
 # Redis (REQUIRED - from Upstash)
 REDIS_URL=rediss://default:PASSWORD@endpoint.upstash.io:6379
 
+# Vercel (REQUIRED for PDF uploads)
+VERCEL_TOKEN=<your-vercel-personal-token-with-blob-scope>
+
 # Email (REQUIRED - for CV submissions)
 EMAIL_USER=careersthecollectivecounsel@gmail.com
 EMAIL_PASSWORD=<gmail-app-password>

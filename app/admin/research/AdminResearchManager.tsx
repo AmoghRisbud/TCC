@@ -72,8 +72,8 @@ export default function AdminResearchManager() {
         : formData;
       
       // Validate PDF URL (if provided) before saving
-      // Note: Skip validation for Cloudinary URLs that were just uploaded, as we trust them
-      if (dataToSubmit.pdf && !dataToSubmit.pdf.includes('res.cloudinary.com/')) {
+      // Note: Skip validation for Cloudinary or our Vercel Blob proxy URLs that were just uploaded, as we trust them
+      if (dataToSubmit.pdf && !dataToSubmit.pdf.includes('res.cloudinary.com/') && !dataToSubmit.pdf.includes('/api/admin/blob/')) {
         try {
           let checkUrl = dataToSubmit.pdf;
           if (checkUrl.startsWith('/')) {
@@ -107,8 +107,8 @@ export default function AdminResearchManager() {
           console.error('PDF validation error:', err);
           throw new Error(err?.message || 'Failed to validate PDF. Please upload using Upload PDF.');
         }
-      } else if (dataToSubmit.pdf && dataToSubmit.pdf.includes('res.cloudinary.com/')) {
-        console.log('Skipping validation for trusted Cloudinary URL:', dataToSubmit.pdf);
+      } else if (dataToSubmit.pdf && (dataToSubmit.pdf.includes('res.cloudinary.com/') || dataToSubmit.pdf.includes('/api/admin/blob/'))) {
+        console.log('Skipping validation for trusted URL:', dataToSubmit.pdf);
       }
 
       const method = modalMode === 'add' ? 'POST' : 'PUT';

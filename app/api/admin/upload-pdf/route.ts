@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { v2 as cloudinary } from 'cloudinary';
 
-// Configure Cloudinary from env
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
+// Upload PDFs to Vercel Blob storage and return a same-origin proxy URL
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
@@ -29,40 +22,62 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File size must be less than 10MB' }, { status: 400 });
     }
 
-    // Convert file to base64
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const base64Data = `data:${file.type};base64,${buffer.toString('base64')}`;
-
-    // Ensure Cloudinary credentials are present
-    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-      console.error('Cloudinary environment variables not configured');
-      return NextResponse.json({ error: 'Cloudinary not configured. Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET in environment.' }, { status: 500 });
+    // Ensure Vercel API token is configured
+    if (!process.env.VERCEL_TOKEN) {
+      console.error('VERCEL_TOKEN is not configured');
+      return NextResponse.json({ error: 'Vercel not configured. Please set VERCEL_TOKEN in environment.' }, { status: 500 });
     }
 
-    // Upload to Cloudinary as raw resource with explicit public access
-    const uploadResult = await cloudinary.uploader.upload(base64Data, {
-      folder: 'tcc/research',
-      resource_type: 'raw',
-      type: 'upload', // Public upload type
-      access_control: [{ access_type: 'anonymous' }], // Explicit public access
-      // keep original filename as public_id base (sanitized)
-      public_id: `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`,
-      use_filename: false,
-      unique_filename: true,
+    // Step 1: Request an upload slot from Vercel Blob API
+    const createRes = await fetch('https://api.vercel.com/v1/blob', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.VERCEL_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: file.name,
+        size: file.size,
+        contentType: file.type
+      })
     });
 
-    const publicUrl = uploadResult.secure_url;
+    if (!createRes.ok) {
+      const body = await createRes.text();
+      console.error('Failed to create Vercel blob:', createRes.status, body);
+      return NextResponse.json({ error: 'Failed to create upload slot on Vercel' }, { status: 500 });
+    }
 
-    return NextResponse.json({ 
-      success: true, 
-      url: publicUrl,
-      message: 'PDF uploaded successfully to Cloudinary',
-      cloudinary_id: uploadResult.public_id,
+    const createJson = await createRes.json();
+    // Expecting { id, uploadUrl, url } or similar
+    const { id, uploadUrl, url } = createJson as any;
+
+    if (!id || !uploadUrl) {
+      console.error('Unexpected response from Vercel blob creation:', createJson);
+      return NextResponse.json({ error: 'Unexpected Vercel response' }, { status: 500 });
+    }
+
+    // Step 2: Upload the raw bytes to the uploadUrl
+    const bytes = await file.arrayBuffer();
+    const putRes = await fetch(uploadUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': file.type },
+      body: Buffer.from(bytes)
     });
-    
+
+    if (!putRes.ok) {
+      const text = await putRes.text();
+      console.error('Failed to PUT file to Vercel upload url:', putRes.status, text);
+      return NextResponse.json({ error: 'Failed to upload file to Vercel storage' }, { status: 500 });
+    }
+
+    // Return a same-origin proxy path that can be used in the UI and validated safely
+    const proxyUrl = `/api/admin/blob/${encodeURIComponent(id)}`;
+
+    return NextResponse.json({ success: true, url: proxyUrl, id, vercelUrl: url || null });
+
   } catch (error) {
-    console.error('Error uploading PDF:', error);
+    console.error('Error uploading PDF to Vercel Blob:', error);
     return NextResponse.json({ 
       error: 'Failed to upload PDF',
       details: error instanceof Error ? error.message : 'Unknown error'
