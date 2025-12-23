@@ -3,6 +3,8 @@ import Link from "next/link";
 import { getPrograms, getTestimonials, getGallery } from "../lib/content";
 import Image from "next/image";
 import { getAnnouncements } from "../lib/announcements";
+import React from "react";
+import ScrollingGallery from "./components/ScrollingGallery";
 
 // Force dynamic rendering to always fetch fresh announcements
 export const dynamic = 'force-dynamic';
@@ -271,27 +273,12 @@ export default async function HomePage() {
             />
           </div>
 
-          <div className="relative mt-10">
-            <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-brand-light to-transparent z-10" />
-            <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-brand-light to-transparent z-10" />
-
-            <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
-              {scrollingGallery.map((item, index) => (
-                <div
-                  key={`${item.id}-${index}`}
-                  className="mx-4 w-64 shrink-0 overflow-hidden rounded-xl shadow-card group"
-                >
-                  <div className="relative h-40">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+          {/* Use client-side component that preloads and gracefully falls back on error */}
+          <div className="container">
+            <React.Suspense fallback={<div className="text-center py-10">Loading gallery…</div>}>
+              {/* @ts-ignore - client component import */}
+              <ScrollingGallery items={gallery} />
+            </React.Suspense>
           </div>
         </section>
       )}
