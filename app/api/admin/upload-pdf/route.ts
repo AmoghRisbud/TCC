@@ -40,11 +40,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Cloudinary not configured. Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET in environment.' }, { status: 500 });
     }
 
-    // Upload to Cloudinary as authenticated raw resource
+    // Upload to Cloudinary as raw resource with public access
     const uploadResult = await cloudinary.uploader.upload(base64Data, {
       folder: 'tcc/research',
       resource_type: 'raw',
-      type: 'authenticated', // Requires signed URLs for access
+      type: 'upload', // Ensures public access (not authenticated)
+      access_mode: 'public', // Explicitly set to public
       // keep original filename as public_id base (sanitized)
       public_id: `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`,
       use_filename: false,
