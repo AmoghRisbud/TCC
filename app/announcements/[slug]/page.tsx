@@ -3,6 +3,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ShareButton from './ShareButton';
 
+// Helper to strip HTML tags server-side
+const stripHtml = (html?: string) => {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+};
+
 // Force dynamic rendering to always fetch fresh data
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -100,7 +106,7 @@ export default async function AnnouncementDetailPage({
             <div className="p-8 md:p-12">
               <div className="prose prose-lg max-w-none">
                 <p className="text-xl text-brand-muted leading-relaxed">
-                  {announcement.description}
+                  {stripHtml(announcement.description)}
                 </p>
               </div>
 
@@ -117,7 +123,7 @@ export default async function AnnouncementDetailPage({
                 </Link>
 
                 {/* Share Button */}
-                <ShareButton title={announcement.title} description={announcement.description} />
+                <ShareButton title={announcement.title} description={stripHtml(announcement.description)} />
               </div>
             </div>
           </div>

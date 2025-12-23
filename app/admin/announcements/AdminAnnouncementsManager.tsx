@@ -15,6 +15,14 @@ const generateSlug = (title: string): string => {
     .replace(/^-+|-+$/g, '');
 };
 
+// Strip HTML tags from a string and collapse whitespace (client-side safe)
+const stripHtml = (html?: string) => {
+  if (!html) return '';
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+};
+
 interface Announcement {
   id: string;
   slug: string;
@@ -84,10 +92,13 @@ export default function AdminAnnouncementsManager() {
       setLoading(true);
       setError(null);
       
+      // Ensure description is saved as plain text (strip any pasted HTML)
+      const prepared = { ...formData, description: stripHtml(formData.description) };
+
       // Auto-generate slug from title if adding new announcement
       const dataToSubmit = modalMode === 'add' 
-        ? { ...formData, slug: generateSlug(formData.title), id: generateSlug(formData.title) }
-        : formData;
+        ? { ...prepared, slug: generateSlug(prepared.title), id: generateSlug(prepared.title) }
+        : prepared;
       
       const method = modalMode === 'add' ? 'POST' : 'PUT';
       const res = await fetch('/api/admin/announcements', {
@@ -178,7 +189,7 @@ export default function AdminAnnouncementsManager() {
                 />
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-brand-dark">{announcement.title}</h3>
-                  <p className="text-sm text-brand-muted mt-1 line-clamp-2">{announcement.description}</p>
+                  <p className="text-sm text-brand-muted mt-1 line-clamp-2">{stripHtml(announcement.description)}</p>
                   <div className="flex items-center gap-4 mt-2">
                     <span className="text-xs text-brand-muted">{announcement.date}</span>
                     <span className="text-xs text-brand-muted">Slug: {announcement.slug}</span>
@@ -243,6 +254,7 @@ export default function AdminAnnouncementsManager() {
                   placeholder="Brief description of the announcement..." 
                   height="200px"
                 />
+                <p className="text-xs text-brand-muted mt-2">Tip: Any formatting you paste will be stripped and the description will be saved as plain text.</p>
               </div>
 
               <ImageUpload

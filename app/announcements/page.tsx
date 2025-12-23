@@ -5,6 +5,12 @@ import Image from "next/image";
 import SectionHeading from "../components/SectionHeading";
 import { Announcement } from "../../lib/types";
 
+// Helper to strip HTML tags and collapse whitespace
+const stripHtml = (html?: string) => {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+};
+
 export default function AnnouncementsPage() {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -69,7 +75,7 @@ export default function AnnouncementsPage() {
                     {a.title}
                   </h3>
                   <p className="text-sm text-brand-muted mt-1 line-clamp-2">
-                    {a.description}
+                    {stripHtml(a.description)}
                   </p>
                   <span className="text-xs text-brand-muted mt-2">{a.date}</span>
                 </div>
@@ -102,7 +108,7 @@ export default function AnnouncementsPage() {
                   </div>
                   <div className="prose max-w-none">
                     <p className="text-brand-muted text-base leading-relaxed">
-                      {a.description}
+                      {stripHtml(a.description)}
                     </p>
                   </div>
                 </div>
