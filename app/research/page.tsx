@@ -82,10 +82,31 @@ export default function ResearchPage() {
         return;
       }
 
-      // For Cloudinary URLs, open them directly - they are public and trusted
+      // For Cloudinary URLs, get signed URL with authentication
       if (pdfUrl.includes('res.cloudinary.com/')) {
-        console.log('Opening Cloudinary PDF directly:', pdfUrl);
-        window.open(pdfUrl, '_blank', 'noopener,noreferrer');
+        console.log('Getting signed URL for Cloudinary PDF:', pdfUrl);
+        
+        try {
+          const response = await fetch('/api/cloudinary-signed-url', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: pdfUrl })
+          });
+
+          if (!response.ok) {
+            console.error('Failed to get signed URL, opening original URL');
+            window.open(pdfUrl, '_blank', 'noopener,noreferrer');
+            return;
+          }
+
+          const data = await response.json();
+          console.log('Opening signed Cloudinary URL');
+          window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
+        } catch (error) {
+          console.error('Error getting signed URL:', error);
+          // Fallback to original URL
+          window.open(pdfUrl, '_blank', 'noopener,noreferrer');
+        }
         return;
       }
 
