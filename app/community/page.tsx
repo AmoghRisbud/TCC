@@ -310,7 +310,7 @@ export default function CommunityPage() {
               {/* Logo */}
               <div className="h-24 flex items-center justify-center mb-6">
                 <img
-                  src="/images/counsel/partnershippro.JPG" // change path if needed
+                  src="/images/counsel/fellowship_logo.jpeg" // change path if needed
                   alt="Partnership Program"
                   className="h-20 object-contain"
                 />
