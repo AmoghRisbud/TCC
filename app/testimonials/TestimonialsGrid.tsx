@@ -6,7 +6,17 @@ import { Testimonial } from '../../lib/types';
 // -------------------- TestimonialCard Component --------------------
 function TestimonialCard({ t }: { t: Testimonial }) {
   const [expanded, setExpanded] = useState(false); // state per card
-  const isLong = t.quote.length > 250; // show read more only if long
+
+  // Helper to strip HTML tags and collapse whitespace
+  const stripHtml = (html: string) => {
+    if (!html) return '';
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+  };
+
+  const plainQuote = stripHtml(t.quote);
+  const isLong = plainQuote.length > 250; // show read more only if long
 
   return (
     <div
@@ -42,7 +52,7 @@ function TestimonialCard({ t }: { t: Testimonial }) {
 
       {/* Quote */}
       <p className={`text-brand-dark leading-relaxed italic ${!expanded ? 'line-clamp-5' : ''}`}>
-        &ldquo;{t.quote}&rdquo;
+        &ldquo;{plainQuote}&rdquo;
       </p>
 
       {/* Read more / less button */}

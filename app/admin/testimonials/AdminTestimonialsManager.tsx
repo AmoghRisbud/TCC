@@ -69,16 +69,28 @@ export default function AdminTestimonialsManager() {
   const openEditModal = (item: Testimonial) => { setFormData(item); setModalMode('edit'); setIsModalOpen(true); };
   const closeModal = () => { setIsModalOpen(false); setFormData(emptyTestimonial); };
 
+  // Strip HTML tags from a string and collapse whitespace
+  const stripHtml = (html: string) => {
+    if (!html) return '';
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    // Convert multiple whitespace/newlines to single spaces and trim
+    return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
       setError(null);
       
+      // Prepare testimonial payload and ensure quote is plain text (no HTML tags)
+      const prepared = { ...formData, quote: stripHtml(formData.quote) } as Testimonial;
+
       // Auto-generate ID from name if adding new testimonial
       const dataToSubmit = modalMode === 'add' 
-        ? { ...formData, id: generateId(formData.name) }
-        : formData;
+        ? { ...prepared, id: generateId(prepared.name) }
+        : prepared;
       
       const method = modalMode === 'add' ? 'POST' : 'PUT';
       const res = await fetch('/api/admin/testimonials', { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dataToSubmit) });
@@ -157,7 +169,7 @@ export default function AdminTestimonialsManager() {
                   {(item.role || item.organization) && (
                     <p className="text-sm text-brand-muted mb-2">{item.role}{item.role && item.organization && ' at '}{item.organization}</p>
                   )}
-                  <p className="text-sm text-brand-dark italic line-clamp-3 mb-3">&ldquo;{item.quote}&rdquo;</p>
+                  <p className="text-sm text-brand-dark italic line-clamp-3 mb-3">&ldquo;{stripHtml(item.quote)}&rdquo;</p>
                   <div className="flex items-center gap-3 text-xs text-brand-muted">
                     {item.rating && (
                       <span className="flex items-center gap-1">
@@ -202,6 +214,7 @@ export default function AdminTestimonialsManager() {
                     placeholder="Their testimonial..." 
                     height="200px"
                   />
+                  <p className="text-xs text-brand-muted mt-2">Tip: Any formatting you paste will be stripped and the quote will be saved as plain text.</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-brand-dark mb-1">Role</label>

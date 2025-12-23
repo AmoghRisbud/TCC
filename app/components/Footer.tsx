@@ -78,7 +78,7 @@ export default function Footer() {
                          text-[15px] leading-relaxed
                          text-gray-200"
             >
-              The Collective Counsel — The Collective Counsel is a community driven platform empowering law students & legal professionals with clarity, practical skills and direction for a meaningful legal career.
+              The Collective Counsel is a community driven platform empowering law students & legal professionals with clarity, practical skills and direction for a meaningful legal career.
             </p>
 
             {/* Social Links */}
