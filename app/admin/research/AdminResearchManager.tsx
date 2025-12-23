@@ -3,7 +3,6 @@
 import React from 'react';
 import { Research } from '@/lib/types';
 import ImageUpload from '../components/ImageUpload';
-import PDFUpload from '../components/PDFUpload';
 import RichTextEditor from '../components/RichTextEditor';
 
 // Helper function to generate URL-friendly slug from title
@@ -72,8 +71,11 @@ export default function AdminResearchManager() {
         : formData;
       
       // Validate PDF URL (if provided) before saving
-      // Note: Skip validation for Cloudinary or our Vercel Blob proxy URLs that were just uploaded, as we trust them
-      if (dataToSubmit.pdf && !dataToSubmit.pdf.includes('res.cloudinary.com/') && !dataToSubmit.pdf.includes('/api/admin/blob/')) {
+      // Note: Skip validation for common cloud storage URLs as they are trusted
+      const trustedHosts = ['res.cloudinary.com/', 'drive.google.com/', 'docs.google.com/', 'dropbox.com/', 'onedrive.live.com/', '1drv.ms/', 'box.com/', 's3.amazonaws.com/'];
+      const isTrustedUrl = dataToSubmit.pdf ? trustedHosts.some(host => dataToSubmit.pdf!.includes(host)) : false;
+      
+      if (dataToSubmit.pdf && !isTrustedUrl) {
         try {
           let checkUrl = dataToSubmit.pdf;
           if (checkUrl.startsWith('/')) {
@@ -107,8 +109,9 @@ export default function AdminResearchManager() {
           console.error('PDF validation error:', err);
           throw new Error(err?.message || 'Failed to validate PDF. Please upload using Upload PDF.');
         }
-      } else if (dataToSubmit.pdf && (dataToSubmit.pdf.includes('res.cloudinary.com/') || dataToSubmit.pdf.includes('/api/admin/blob/'))) {
-        console.log('Skipping validation for trusted URL:', dataToSubmit.pdf);
+      } else if (dataToSubmit.pdf && isTrustedUrl) {
+        // Trusted cloud storage URLs - skip validation
+        console.log('Skipping validation for trusted cloud storage URL:', dataToSubmit.pdf);
       }
 
       const method = modalMode === 'add' ? 'POST' : 'PUT';
@@ -261,11 +264,23 @@ export default function AdminResearchManager() {
                     label="Research Image/Thumbnail"
                   />
                   
-                  <PDFUpload
-                    currentPDF={formData.pdf}
-                    onPDFChange={(url) => setFormData(p => ({ ...p, pdf: url }))}
-                    label="Research PDF Document"
-                  />
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Research PDF Document URL
+                    </label>
+                    <input
+                      type="url"
+                      value={formData.pdf}
+                      onChange={(e) => setFormData(p => ({ ...p, pdf: e.target.value }))}
+                      placeholder="https://drive.google.com/file/d/... or any cloud storage URL"
+                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                    />
+                    <p className="text-xs text-gray-500">
+                      Upload your PDF to Google Drive, Dropbox, OneDrive, or any cloud storage, then paste the shareable link here.
+                      <br />
+                      Supported: Google Drive, Dropbox, OneDrive, Box, AWS S3, Cloudinary
+                    </p>
+                  </div>
                 </div>
 
                 <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">

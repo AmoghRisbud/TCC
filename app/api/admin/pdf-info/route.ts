@@ -8,14 +8,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing url' }, { status: 400 });
     }
 
-    // Only allow checking trusted hosts (Cloudinary, Vercel Blob, or same-origin) for safety
+    // Allow checking common cloud storage hosts and same-origin
     const sameOriginHost = new URL(process.env.NEXTAUTH_URL || (process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000')).host;
     const allowedHostSuffixes = [
       'res.cloudinary.com',
-      'vercel.com',
-      'vercel.app',
-      'vercel-storage.com',
-      'vercel.pub',
+      'drive.google.com',
+      'docs.google.com',
+      'googleapis.com',
+      'dropbox.com',
+      'dropboxusercontent.com',
+      'onedrive.live.com',
+      '1drv.ms',
+      'sharepoint.com',
+      'box.com',
+      's3.amazonaws.com',
+      'amazonaws.com',
+      'storage.googleapis.com',
+      'cloudinary.com',
     ];
 
     try {
