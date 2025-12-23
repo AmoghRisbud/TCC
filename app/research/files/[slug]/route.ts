@@ -44,7 +44,7 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
       const res = await fetch(pdf, { 
         method: 'GET',
         headers: {
-          'Accept': 'application/pdf',
+          'Accept': 'application/pdf, application/octet-stream',
         }
       });
       if (!res.ok) {
@@ -54,8 +54,14 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
 
       const contentType = res.headers.get('content-type') || '';
 
-      // If content-type indicates PDF, stream it directly
-      if (contentType.toLowerCase().includes('pdf')) {
+      // For Cloudinary URLs, trust they are PDFs even if content-type is generic
+      const isCloudinary = pdf.includes('res.cloudinary.com/');
+      const looksLikePdf = contentType.toLowerCase().includes('pdf') || 
+                           contentType.toLowerCase().includes('octet-stream') ||
+                           isCloudinary;
+
+      // If likely a PDF, verify and stream it directly
+      if (looksLikePdf) {
         const reader = res.body?.getReader();
         if (!reader) {
           return NextResponse.redirect(pdf);
@@ -68,8 +74,16 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
         }
 
         const header = Buffer.from(firstChunk.slice(0, 4)).toString('utf8');
-        if (header !== '%PDF') {
+        
+        // For Cloudinary, be more lenient - if it claims to be raw upload, trust it
+        if (header !== '%PDF' && !isCloudinary) {
+          console.warn(`File does not start with PDF header: ${header}`);
           return NextResponse.redirect(pdf);
+        }
+        
+        if (header !== '%PDF' && isCloudinary) {
+          console.warn(`Cloudinary file does not have PDF header, but trusting the upload: ${header}`);
+          // Still stream it since Cloudinary might have encoding issues
         }
 
         // Create a ReadableStream that includes the first chunk we already read

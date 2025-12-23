@@ -82,6 +82,14 @@ export default function ResearchPage() {
         return;
       }
 
+      // Trust Cloudinary URLs - open directly via proxy without validation
+      if (pdfUrl.includes('res.cloudinary.com/')) {
+        console.log('Opening trusted Cloudinary PDF via proxy:', pdfUrl);
+        window.open(`/research/files/${slug}`, '_blank', 'noopener,noreferrer');
+        return;
+      }
+
+      // For other remote URLs, validate before opening
       try {
         const check = await fetch('/api/admin/pdf-info', {
           method: 'POST',
