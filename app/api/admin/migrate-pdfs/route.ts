@@ -53,9 +53,12 @@ export async function POST(request: NextRequest) {
       would_migrate: [] as string[],
     };
 
+    const fs = require('fs');
+    const path = require('path');
+
     for (const article of research) {
       const slug = article.slug;
-      const pdfUrl = article.pdf;
+      let pdfUrl = article.pdf;
 
       if (!pdfUrl) {
         report.skipped.push({ slug, reason: 'no_pdf' });
@@ -67,7 +70,54 @@ export async function POST(request: NextRequest) {
         continue;
       }
 
+      // Handle local files (absolute path starting with '/' or relative paths)
       try {
+        if (pdfUrl.startsWith('/') || !/^https?:\/\//i.test(pdfUrl)) {
+          // Resolve to public/ folder on disk
+          const relative = pdfUrl.replace(/^\/+/, '');
+          const publicPath = path.join(process.cwd(), 'public', relative);
+
+          if (fs.existsSync(publicPath)) {
+            const fileBuf = fs.readFileSync(publicPath);
+            const header = fileBuf && fileBuf.length >= 4 ? Buffer.from(fileBuf.slice(0, 4)).toString('utf8') : null;
+            if (header !== '%PDF') {
+              report.failed.push({ slug, reason: 'not_pdf_local' });
+              continue;
+            }
+
+            // Upload local file to Cloudinary
+            const base64 = Buffer.from(fileBuf).toString('base64');
+            const dataUri = `data:application/pdf;base64,${base64}`;
+
+            const uploadResult = await cloudinary.uploader.upload(dataUri, {
+              folder: 'tcc/research',
+              resource_type: 'raw',
+              public_id: `${Date.now()}-${slug}`,
+              use_filename: false,
+              unique_filename: true,
+            });
+
+            article.pdf = uploadResult.secure_url;
+            (article as any).pdf_cloudinary_id = uploadResult.public_id;
+            report.migrated.push(slug);
+            continue; // processed local file
+          }
+
+          // If not found on disk, try to resolve against site origin (if configured) so fetch can proceed
+          const siteOrigin = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_BASE_URL || null;
+          if (siteOrigin) {
+            try {
+              pdfUrl = new URL(pdfUrl, siteOrigin).toString();
+            } catch (e) {
+              report.failed.push({ slug, reason: `failed_to_resolve_relative:${String(e)}` });
+              continue;
+            }
+          } else {
+            report.failed.push({ slug, reason: 'file_not_found' });
+            continue;
+          }
+        }
+
         // Fetch first chunk to validate PDF magic
         const res = await fetch(pdfUrl, { method: 'GET' });
         if (!res.ok) {
