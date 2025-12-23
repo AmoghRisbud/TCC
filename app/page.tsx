@@ -205,65 +205,45 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {programs.map((p) => (
-              <Link
-                key={p.slug}
-                href={`/programs/${p.slug}`}
-                className="group block"
-              >
-                <div
-                  className="card-interactive relative
-                flex flex-col items-center justify-center p-8 text-center
-                bg-gradient-to-br
-                from-[#FAF8F2]
-                via-brand-light
-                to-[#F3EFE3]
-                ring-1 ring-black/10
-                shadow-md
-                hover:shadow-xl
-                hover:ring-brand-secondary/40
-                transition-all duration-300"
-                >
-                  {/* Logo */}
-                  <div className="mb-4 w-14 h-14 rounded-xl bg-white border flex items-center justify-center">
-                    {p.logo && (
+              <Link key={p.slug} href={`/programs/${p.slug}`} className="group block">
+                <div className="card-interactive flex flex-col h-full
+                            bg-gradient-to-br from-white via-white to-brand-light/40
+                            border border-brand-primary/10
+                            shadow-sm hover:shadow-xl hover:-translate-y-1
+                            transition-all duration-300 overflow-hidden">
+
+                  {/* Wide image (logo or hero) */}
+                  {p.logo && (
+                    <div className="mb-4 overflow-hidden">
                       <Image
                         src={p.logo}
                         alt={`${p.title} logo`}
-                        width={40}
-                        height={40}
-                        className="object-contain"
+                        width={400}
+                        height={200}
+                        className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                       />
-                    )}
-                  </div>
+                    </div>
+                  )}
 
-                  {/* Title */}
-                  <h3 className="h3 mb-2 group-hover:text-brand-primary transition-colors">
-                    {p.title}
-                  </h3>
+                  {/* Content */}
+                  <div className="flex flex-col flex-1 p-6 pt-0">
+                    <h3 className="h3 mb-2 group-hover:text-brand-primary transition-colors">{p.title}</h3>
 
-                  {/* Description */}
-                  <p className="text-brand-muted text-sm leading-relaxed line-clamp-2">
-                    {p.shortDescription}
-                  </p>
+                    <p className="text-brand-muted text-sm leading-relaxed line-clamp-3 mb-6 break-words overflow-hidden flex-1">{p.shortDescription}</p>
 
-                  {/* CTA */}
-                  <div className="mt-5">
-                    <span className="inline-flex items-center gap-2 text-brand-primary font-medium group-hover:gap-3 transition-all">
-                      View Details
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </span>
+                    <div className="flex flex-col items-center gap-3">
+                      <span className="inline-flex items-center justify-center px-5 py-2 rounded-lg
+                                  bg-brand-primary text-white text-sm font-semibold
+                                  shadow-md hover:bg-brand-accent hover:shadow-lg
+                                  transition-all w-full">Apply Now</span>
+
+                      <span className="inline-flex items-center gap-2 text-brand-primary text-sm font-medium
+                                      group-hover:gap-3 transition-all">View Details
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                    </div>
                   </div>
                 </div>
               </Link>
