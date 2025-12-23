@@ -11,7 +11,10 @@ export const revalidate = 0;
 export default async function HomePage() {
   const announcements = await getAnnouncements();
   const allPrograms = await getPrograms();
-  const programs = allPrograms.slice(0, 2);
+
+  // Show featured programs on homepage if any; otherwise show first 3
+  const featuredPrograms = allPrograms.filter(p => p.featured === true || (p.featured as any) === 'true');
+  const programs = featuredPrograms.length > 0 ? featuredPrograms.slice(0, 3) : allPrograms.slice(0, 3);
   const allTestimonials = await getTestimonials();
   const gallery = await getGallery();
 

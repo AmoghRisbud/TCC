@@ -78,9 +78,10 @@ export async function POST(request: NextRequest) {
     const updatedPrograms = [...existingPrograms, newProgram];
     await redis.set(REDIS_KEY, JSON.stringify(updatedPrograms));
 
-    // Revalidate programs pages
+    // Revalidate programs pages and homepage (in case featured changed)
     revalidatePath('/programs');
     revalidatePath('/programs/[slug]', 'page');
+    revalidatePath('/');
 
     return NextResponse.json({ success: true, program: newProgram, total: updatedPrograms.length });
   } catch (error) {
@@ -117,9 +118,10 @@ export async function PUT(request: NextRequest) {
 
     await redis.set(REDIS_KEY, JSON.stringify(programs));
 
-    // Revalidate programs pages
+    // Revalidate programs pages and homepage (in case featured changed)
     revalidatePath('/programs');
     revalidatePath('/programs/[slug]', 'page');
+    revalidatePath('/');
 
     return NextResponse.json({ success: true, program: updatedProgram });
   } catch (error) {
@@ -160,9 +162,10 @@ export async function DELETE(request: NextRequest) {
 
     await redis.set(REDIS_KEY, JSON.stringify(filteredPrograms));
 
-    // Revalidate programs pages
+    // Revalidate programs pages and homepage (in case featured changed)
     revalidatePath('/programs');
     revalidatePath('/programs/[slug]', 'page');
+    revalidatePath('/');
 
     return NextResponse.json({ 
       success: true, 

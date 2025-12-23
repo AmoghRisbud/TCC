@@ -28,6 +28,7 @@ interface Program {
   enrollmentFormUrl?: string;
   duration?: string;
   logo?: string;
+  featured?: boolean;
 }
 
 const emptyProgram: Program = {
@@ -43,6 +44,7 @@ const emptyProgram: Program = {
   enrollmentFormUrl: '',
   duration: '',
   logo: '',
+  featured: false,
 };
 
 export default function AdminProgramsManager() {
@@ -208,7 +210,10 @@ export default function AdminProgramsManager() {
             <div key={program.slug} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between mb-3">
                 <h3 className="font-semibold text-brand-dark line-clamp-1">{program.title}</h3>
-                <span className="text-xs px-2 py-1 bg-brand-primary/10 text-brand-primary rounded-full">{program.mode || 'Online'}</span>
+                <div className="flex items-center gap-2">
+                  {program.featured && <span className="text-xs px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full">Featured</span>}
+                  <span className="text-xs px-2 py-1 bg-brand-primary/10 text-brand-primary rounded-full">{program.mode || 'Online'}</span>
+                </div>
               </div>
               <p className="text-sm text-brand-muted line-clamp-2 mb-4">{program.shortDescription}</p>
               <div className="grid grid-cols-2 gap-2 text-xs text-brand-muted mb-4">
@@ -324,6 +329,11 @@ export default function AdminProgramsManager() {
                 <div>
                   <label className="block text-sm font-medium text-brand-dark mb-1">Fee</label>
                   <input type="text" value={formData.fee} onChange={e => setFormData(p => ({ ...p, fee: e.target.value }))} className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" placeholder="e.g., ₹50,000" />
+                </div>
+
+                <div className="flex items-center gap-2 col-span-2">
+                  <input type="checkbox" id="featured" checked={!!formData.featured} onChange={e => setFormData(p => ({ ...p, featured: e.target.checked }))} className="w-4 h-4 rounded border-gray-300 text-brand-primary focus:ring-brand-primary" />
+                  <label htmlFor="featured" className="text-sm font-medium text-brand-dark">Featured on Homepage</label>
                 </div>
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-brand-dark mb-1">Enrollment Form URL</label>
