@@ -203,7 +203,7 @@ export default async function HomePage() {
             subtitle="Discover our carefully curated programs designed to enhance your legal career."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {programs.map((p) => (
               <Link key={p.slug} href={`/programs/${p.slug}`} className="group block">
                 <div className="card-interactive flex flex-col h-full
