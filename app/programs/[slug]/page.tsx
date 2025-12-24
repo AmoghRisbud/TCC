@@ -25,16 +25,16 @@ export default async function ProgramDetail({
 
     {/* PROGRAM IMAGE */}
     {program.logo && (
-<div className="mx-auto mb-8 max-w-6xl flex justify-center">
+<div className="relative mx-auto mb-6 w-full px-4 md:px-8">
   <Image
     src={program.logo}
     alt={program.title}
-    width={1200}
+    width={1600}
     height={400}
     priority
     className="
       w-full
-      max-h-[160px] md:max-h-[180px]
+      max-h-[150px] md:max-h-[170px]
       object-contain
       rounded-lg
     "
