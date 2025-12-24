@@ -208,11 +208,183 @@ export const privacyPolicyContent = (
 
 export const termsContent = (
   <>
+    <p><strong>TERMS OF USE</strong></p>
+
     <p>
-      By accessing this website, you agree to comply with our Terms of Service.
+      These Terms and Conditions (“Terms”) govern your use of The Collective Counsel (“tCC”)
+      website, services, and resources. By accessing or using tCC, you agree to be bound by
+      these Terms, our Privacy Policy, and any additional guidelines issued from time to time.
+      If you do not agree, you must discontinue use immediately.
     </p>
+
+    <p><strong>1. Eligibility</strong></p>
+    <ul>
+      <li>
+        tCC’s services are intended for law students, professionals, and individuals aligned
+        with our mission of empowering first-generation lawyers.
+      </li>
+      <li>
+        By using our services, you confirm that you are at least 18 years old or have
+        parental/guardian consent if younger.
+      </li>
+      <li>
+        tCC reserves the right to restrict access to any user who does not meet eligibility
+        criteria.
+      </li>
+    </ul>
+
+    <p><strong>2. User Obligations and Code of Conduct</strong></p>
     <p>
-      Content is provided for educational purposes only.
+      To ensure the integrity, safety, and fairness of The Collective Counsel (tCC) community,
+      all users agree to the following obligations:
+    </p>
+
+    <p><strong>• Accuracy of Information</strong></p>
+    <p>
+      Users must provide true, complete, and updated information during registration,
+      participation in programs, or submission of content. Misrepresentation, falsification,
+      or omission of material facts may lead to suspension, termination of services, or denial
+      of certification.
+    </p>
+
+    <p><strong>• Lawful Use</strong></p>
+    <p>
+      Users agree to use tCC’s services only for lawful purposes and in compliance with all
+      applicable laws. Fraud, impersonation, unlawful material, intellectual property
+      violations, or unauthorized commercial use is prohibited.
+    </p>
+
+    <p><strong>• Respectful Conduct</strong></p>
+    <p>
+      Users must maintain professionalism and respect in all interactions. Harassment,
+      abuse, discrimination, or disruptive behaviour will not be tolerated.
+    </p>
+
+    <p><strong>• Intellectual Property Compliance</strong></p>
+    <p>
+      Users may not copy, reproduce, distribute, or exploit tCC’s content without prior
+      written authorization.
+    </p>
+
+    <p><strong>• Security</strong></p>
+    <p>
+      Users must not attempt unauthorized access, introduce malware, phishing, or other
+      harmful technologies.
+    </p>
+
+    <p><strong>• Confidentiality</strong></p>
+    <p>
+      Users must respect the confidentiality of internal communications, member data, and
+      proprietary resources.
+    </p>
+
+    <p><strong>• Consequences of Breach</strong></p>
+    <ol type="i">
+      <li>Formal warnings</li>
+      <li>Temporary suspension of access</li>
+      <li>Permanent termination of services</li>
+      <li>Legal remedies including damages or injunctive relief</li>
+    </ol>
+
+    <p><strong>3. Organization Responsibilities</strong></p>
+
+    <p><strong>• Accurate and Transparent Information</strong></p>
+    <p>
+      tCC will provide clear, accurate, and up-to-date information regarding its programs and
+      services.
+    </p>
+
+    <p><strong>• Data Protection and Privacy</strong></p>
+    <p>
+      tCC will safeguard personal information and comply with applicable data protection
+      laws.
+    </p>
+
+    <p><strong>• Fair Access and Inclusivity</strong></p>
+    <p>
+      tCC ensures non-discriminatory access and actively supports inclusivity.
+    </p>
+
+    <p><strong>• Prompt Notification of Changes or Breaches</strong></p>
+    <p>
+      Users will be notified of significant changes or data breaches within a reasonable
+      timeframe.
+    </p>
+
+    <p><strong>• Quality Assurance</strong></p>
+    <p>
+      tCC continuously evaluates programs to maintain quality and relevance.
+    </p>
+
+    <p><strong>• Legal and Ethical Compliance</strong></p>
+    <p>
+      tCC operates in compliance with Indian laws and ethical standards.
+    </p>
+
+    <p><strong>4. Intellectual Property Rights</strong></p>
+
+    <p><strong>• Ownership of Content</strong></p>
+    <p>
+      All content on tCC’s platform is the intellectual property of tCC or its contributors
+      and protected under applicable laws.
+    </p>
+
+    <p><strong>• Restricted Use</strong></p>
+    <p>
+      Content may be used only for personal, educational, and non-commercial purposes.
+    </p>
+
+    <p><strong>• Trademarks and Branding</strong></p>
+    <p>
+      All trademarks and logos are the property of tCC and may not be used without consent.
+    </p>
+
+    <p><strong>• User-Generated Content</strong></p>
+    <p>
+      Users retain ownership but grant tCC a non-exclusive, royalty-free license to use such
+      content.
+    </p>
+
+    <p><strong>5. Educational Content and Pre-Recorded Lectures</strong></p>
+    <p>
+      Educational materials are provided for personal learning only and do not guarantee
+      certification or professional outcomes.
+    </p>
+
+    <p><strong>6. Payments, Refunds, and Pricing</strong></p>
+    <p>
+      Payments are processed via secure third-party gateways. Refunds follow the policy
+      communicated at purchase.
+    </p>
+
+    <p><strong>7. Privacy and Data Protection</strong></p>
+    <p>
+      Use of tCC’s services is governed by our Privacy Policy.
+    </p>
+
+    <p><strong>8. Limitation of Liability</strong></p>
+    <p>
+      tCC provides services on an “as is” basis and limits liability to the amount paid for
+      the service.
+    </p>
+
+    <p><strong>9. Governing Law and Jurisdiction</strong></p>
+    <p>
+      These Terms are governed by the laws of India, subject to the jurisdiction of courts in
+      (insert city), India.
+    </p>
+
+    <p><strong>10. Contact Us</strong></p>
+    <p>
+      For any questions regarding these Terms or tCC’s services, contact:
+      <br />
+      <strong>The Collective Counsel</strong> (contact details to be inserted)
+    </p>
+
+    <p>
+      We encourage users to reach out for clarifications, feedback, or support. tCC is
+      committed to transparency and accessibility.
     </p>
   </>
 );
+
