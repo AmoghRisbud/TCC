@@ -197,7 +197,7 @@ const peopleGroups = [
       {
         name: "Adv. Richa Bharadwaj",
         designation: "Legal counsel IP and tech law specialist",
-        image: "/images/counsel/Tushar.jpeg",
+        image: "/images/counsel/Richa.jpeg",
       },
     ],
   },
