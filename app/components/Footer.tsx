@@ -12,7 +12,6 @@ const quickLinks = [
   { href: "/community", label: "Community" },
   { href: "/careers", label: "Careers" },
   { href: "/contact", label: "Contact" },
-  { href: "/admin", label: "Admin" },
 ];
 
 const socialLinks = [
