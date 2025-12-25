@@ -85,6 +85,7 @@ export async function POST(request: NextRequest) {
     // Ensure id matches slug for consistency
     newAnnouncement.id = newAnnouncement.slug;
 
+    // Add to array (sorting happens on retrieval in GET endpoint)
     const updatedAnnouncements = [...existingAnnouncements, newAnnouncement];
     await redis.set(REDIS_KEY, JSON.stringify(updatedAnnouncements));
 
