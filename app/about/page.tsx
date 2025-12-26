@@ -135,7 +135,7 @@ const peopleGroups = [
       },
       {
         name: " Adv. Ankit Kuril",
-        designation: "Community & Partnership manager",
+        designation: "Co-Founder , Partnerships",
         image:
           "/images/counsel/Ankit Kuril (Growth and Partnership Manager).jpg",
       },
