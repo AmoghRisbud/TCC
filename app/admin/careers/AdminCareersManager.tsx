@@ -40,6 +40,7 @@ export default function AdminCareersManager() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [modalMode, setModalMode] = React.useState<'add' | 'edit'>('add');
   const [formData, setFormData] = React.useState<Job>(emptyJob);
+  const [originalSlug, setOriginalSlug] = React.useState<string>(''); // Store original slug for edit mode
   const [deleteConfirm, setDeleteConfirm] = React.useState<string | null>(null);
   const [viewItem, setViewItem] = React.useState<Job | null>(null);
 
@@ -62,6 +63,7 @@ export default function AdminCareersManager() {
 
   const openAddModal = () => { 
     setFormData(emptyJob); 
+    setOriginalSlug('');
     setRequirementsInput('');
     setResponsibilitiesInput('');
     setModalMode('add'); 
@@ -70,6 +72,7 @@ export default function AdminCareersManager() {
 
   const openEditModal = (item: Job) => { 
     setFormData(item); 
+    setOriginalSlug(item.slug); // Store original slug for PUT request
     setRequirementsInput(item.requirements?.join('\n') || '');
     setResponsibilitiesInput(item.responsibilities?.join('\n') || '');
     setModalMode('edit'); 
@@ -79,6 +82,7 @@ export default function AdminCareersManager() {
   const closeModal = () => { 
     setIsModalOpen(false); 
     setFormData(emptyJob); 
+    setOriginalSlug('');
     setDateError(null);
   };
 
@@ -117,7 +121,12 @@ export default function AdminCareersManager() {
       };
 
       const method = modalMode === 'add' ? 'POST' : 'PUT';
-      const res = await fetch('/api/admin/careers', { 
+      // For edit mode, send originalSlug in query params to identify which job to update
+      const url = modalMode === 'edit' 
+        ? `/api/admin/careers?slug=${encodeURIComponent(originalSlug)}`
+        : '/api/admin/careers';
+      
+      const res = await fetch(url, { 
         method, 
         headers: { 'Content-Type': 'application/json' }, 
         body: JSON.stringify(processedData) 

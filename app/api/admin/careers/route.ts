@@ -113,20 +113,29 @@ export async function PUT(request: NextRequest) {
 
     const updatedJob: Job = await request.json();
     
+    // Get the original slug from query params (the job to find and update)
+    const { searchParams } = new URL(request.url);
+    const originalSlug = searchParams.get('slug');
+    
+    if (!originalSlug) {
+      return NextResponse.json({ error: 'Original job slug is required in query params' }, { status: 400 });
+    }
+    
     if (!updatedJob.slug) {
-      return NextResponse.json({ error: 'Job slug is required' }, { status: 400 });
+      return NextResponse.json({ error: 'New job slug is required' }, { status: 400 });
     }
 
     const redis = getRedisClient();
     const data = await redis.get(REDIS_KEY);
     const jobs: Job[] = data ? JSON.parse(data) : [];
     
-    const index = jobs.findIndex(j => j.slug === updatedJob.slug);
+    const index = jobs.findIndex(j => j.slug === originalSlug);
     
     if (index === -1) {
       return NextResponse.json({ error: 'Job not found' }, { status: 404 });
     }
 
+    // Update the job (allows slug to be changed)
     jobs[index] = { ...jobs[index], ...updatedJob };
     await redis.set(REDIS_KEY, JSON.stringify(jobs));
 
