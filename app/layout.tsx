@@ -3,6 +3,7 @@ import React from 'react';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import SessionProvider from './components/SessionProvider';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
   title: 'The Collective Counsel',
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main>{children}</main>
           <Footer />
         </SessionProvider>
+        <Analytics />
       </body>
     </html>
   );
