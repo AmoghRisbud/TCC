@@ -20,6 +20,7 @@ export interface Program {
   ctaUrl?: string;
   brochureUrl?: string;
   enrollmentFormUrl?: string;
+  introVideoLink?: string;
   tags?: string[];
   featured?: boolean;
   status?: string;

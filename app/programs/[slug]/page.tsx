@@ -76,6 +76,27 @@ export default async function ProgramDetail({
   </div>
 </section>
 
+      {/* ================= INTRO VIDEO ================= */}
+      {program.introVideoLink && (
+        <section className="section bg-white">
+          <div className="container max-w-4xl">
+            <h2 className="h2 mb-6 text-center">Program Introduction</h2>
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                className="absolute top-0 left-0 w-full h-full rounded-xl shadow-lg"
+                src={program.introVideoLink.includes('youtube.com') || program.introVideoLink.includes('youtu.be') 
+                  ? program.introVideoLink.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/').split('&')[0]
+                  : program.introVideoLink
+                }
+                title="Program Introduction Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ================= CONTENT ================= */}
       <section className="section bg-brand-light">

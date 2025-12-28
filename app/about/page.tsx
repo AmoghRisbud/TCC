@@ -121,7 +121,7 @@ const peopleGroups = [
         name: "Mr. Chhotoo Kumar",
         designation: "Course Production Coordinator",
         image:
-          "/images/counsel/Chhotoo Kumar _Course Production Coordinator .jpg",
+          "/images/counsel/ChhotuKumar_Updated.jpg",
       },
       {
         name: "Mr. Kaustav Das Sharma",
@@ -183,6 +183,11 @@ const peopleGroups = [
         name: "Alice donogue",
         designation: "Advocate Bombay High Court",
         image: "/images/counsel/Alice.jpeg",
+      },
+      {
+        name: "Adv. Nitish Mehra",
+        designation: "Member Delhi High Court Bar Association",
+        image: "/images/counsel/Nitish_Mehra_2.JPG",
       },
     ],
   },

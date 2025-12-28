@@ -26,6 +26,7 @@ interface Program {
   endDate?: string;
   fee?: string;
   enrollmentFormUrl?: string;
+  introVideoLink?: string;
   duration?: string;
   logo?: string;
   featured?: boolean;
@@ -43,6 +44,7 @@ const emptyProgram: Program = {
   endDate: '',
   fee: '',
   enrollmentFormUrl: '',
+  introVideoLink: '',
   duration: '',
   logo: '',
   featured: false,
@@ -351,6 +353,11 @@ export default function AdminProgramsManager() {
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-brand-dark mb-1">Enrollment Form URL</label>
                   <input type="url" value={formData.enrollmentFormUrl} onChange={e => setFormData(p => ({ ...p, enrollmentFormUrl: e.target.value }))} className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" placeholder="https://forms.google.com/..." />
+                </div>
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-brand-dark mb-1">Intro Video Link (YouTube)</label>
+                  <input type="url" value={formData.introVideoLink} onChange={e => setFormData(p => ({ ...p, introVideoLink: e.target.value }))} className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary" placeholder="https://www.youtube.com/watch?v=..." />
+                  <p className="text-xs text-brand-muted mt-1">Enter YouTube video URL to display on program details page</p>
                 </div>
               </div>
 
