@@ -9,8 +9,32 @@ export const metadata = {
   title: 'The Collective Counsel',
   description: 'Helping Law Students Find Clarity, Skills & Direction.',
   icons: {
-    icon: '/CCLogo.png',
+    icon: [
+      { url: '/CCLogo.png' },
+      { url: '/CCLogo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/CCLogo.png', sizes: '16x16', type: 'image/png' },
+    ],
     apple: '/CCLogo.png',
+    shortcut: '/CCLogo.png',
+  },
+  openGraph: {
+    title: 'The Collective Counsel',
+    description: 'Helping Law Students Find Clarity, Skills & Direction.',
+    url: 'https://www.thecollectivecounsel.com',
+    siteName: 'The Collective Counsel',
+    images: [
+      {
+        url: '/CCLogo.png',
+        alt: 'The Collective Counsel Logo',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'The Collective Counsel',
+    description: 'Helping Law Students Find Clarity, Skills & Direction.',
+    images: ['/CCLogo.png'],
   },
 };
 
