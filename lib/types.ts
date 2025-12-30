@@ -107,6 +107,17 @@ export interface Announcement {
   date: string;
 }
 
+export interface Achievement {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  image: string;
+  date: string;
+  category?: string;
+  featured?: boolean;
+}
+
 export interface SiteSettings {
   siteName: string;
   heroCopy?: string;

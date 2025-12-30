@@ -1,6 +1,6 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import SectionHeading from '../components/SectionHeading';
 import { getJobs } from '../../lib/content';
 import CVSubmissionForm from './CVSubmissionForm';
 
@@ -86,10 +86,20 @@ export default async function CareersPage() {
             <div>
               {/* Heading block */}
               <div className="mb-10">
-                <h2 className="text-3xl font-semibold tracking-tight text-gray-900">
-                  Careers in{" "}
-                  <span className="text-brand-accent">Law</span>
-                </h2>
+                <div className="flex items-center gap-4 flex-nowrap">
+                  <h2 className="text-3xl font-semibold tracking-tight text-gray-900">
+                    Careers in{" "}
+                    <span className="text-brand-accent">Law</span>
+                  </h2>
+                  <Image
+                    src="/KaronyxXTcc.PNG"
+                    alt="Karonyx X TCC collaboration logo"
+                    width={250}
+                    height={100}
+                    className="h-24 w-auto"
+                    priority={true}
+                  />
+                </div>
 
                 <div className="mt-3 h-1 w-12 rounded-full bg-brand-accent/70" />
 

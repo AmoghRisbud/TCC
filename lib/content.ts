@@ -9,6 +9,7 @@ import {
   Job,
   GalleryItem,
   SiteSettings,
+  Achievement,
 } from './types';
 import { getRedisClient, ensureRedisConnection } from './redis';
 
@@ -74,6 +75,14 @@ export const getTeam = (): TeamMember[] => readMarkdownDir('team', (d, slug) => 
 
 export const getJobs = async (): Promise<Job[]> => {
   return getFromRedisOrMarkdown('tcc:careers', 'jobs', (d, slug) => ({ slug, ...d }));
+};
+
+export const getAchievements = async (): Promise<Achievement[]> => {
+  return getFromRedisOrMarkdown('tcc:achievements', 'achievements', (d, slug) => ({ 
+    id: slug, 
+    slug, 
+    ...d 
+  }));
 };
 
 export const getSiteSettings = (): SiteSettings => {

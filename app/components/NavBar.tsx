@@ -12,6 +12,7 @@ const links = [
   { href: '/research', label: 'Research' },
   { href: '/community', label: 'Community' },
   { href: '/media', label: 'Media' },
+  { href: '/achievements', label: 'Achievements' },
   { href: '/careers', label: 'Careers' },
   { href: '/contact', label: 'Contact' },
 ];
