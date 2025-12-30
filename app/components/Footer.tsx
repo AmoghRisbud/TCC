@@ -74,8 +74,7 @@ const [modalType, setModalType] = useState<ModalType>(null);
           <div className="md:col-span-2">
             <Link href="/" className="inline-block">
               <span
-                className="text-3xl text-brand-secondary font-extrabold tracking-wide
-                               text-white drop-shadow-sm"
+                className="text-3xl text-white font-extrabold tracking-wide drop-shadow-sm"
               >
                 The Collective Counsel
               </span>

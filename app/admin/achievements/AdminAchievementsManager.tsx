@@ -302,9 +302,9 @@ export default function AdminAchievementsManager() {
                   Image URL *
                 </label>
                 <ImageUpload
-                  value={formData.image}
-                  onChange={(value) => setFormData({ ...formData, image: value })}
-                  uploadPath="achievements"
+                  currentImage={formData.image}
+                  category="achievements"
+                  onImageChange={(imageUrl: string) => setFormData({ ...formData, image: imageUrl })}
                 />
               </div>
 
