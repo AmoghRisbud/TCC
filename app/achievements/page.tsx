@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { getAchievements } from '../../lib/content';
 import AchievementsGrid from './AchievementsGrid';
 
@@ -19,16 +20,30 @@ export default async function AchievementsPage() {
         style={{
           backgroundImage: 'url(/images/achievements-collab.jpg)',
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundPosition: '40% center',
           backgroundBlendMode: 'overlay',
         }}
       >
-        <div className="absolute inset-0 bg-brand-primary/80"></div>
-        <div className="container text-center max-w-3xl mx-auto relative z-10">
+        <div className="absolute inset-0 bg-brand-primary/85 md:bg-brand-primary/80"></div>
+        <div className="container text-center max-w-3xl mx-auto relative z-10 px-4">
           <h1 className="h1 mb-4">Our Achievements</h1>
-          <p className="text-lg text-white/85 leading-relaxed mx-auto">
+          <p className="text-base md:text-lg text-white/90 leading-relaxed mx-auto">
             Celebrating milestones, awards, and recognition that mark our journey in legal education and community impact.
           </p>
+        </div>
+      </section>
+
+      {/* Partnership Logo */}
+      <section className="py-4 bg-white">
+        <div className="container max-w-2xl flex justify-center">
+          <Image
+            src="/KaronyxXTcc.PNG"
+            alt="Karonyx X TCC Partnership"
+            width={300}
+            height={80}
+            priority
+            className="w-full max-w-xs md:max-w-sm h-auto rounded-lg shadow-md"
+          />
         </div>
       </section>
 
