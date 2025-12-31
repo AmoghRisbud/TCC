@@ -80,26 +80,34 @@ export default async function CareersPage() {
                   No open positions currently.
                 </p>
               )}
-            </div>
+             </div>
 
             {/* Careers in Law */}
             <div>
               {/* Heading block */}
               <div className="mb-10">
                 <div className="flex items-center gap-4 flex-nowrap">
-                  <h2 className="text-3xl font-semibold tracking-tight text-gray-900">
-                    Careers in{" "}
-                    <span className="text-brand-accent">Law</span>
-                  </h2>
-                  <Image
-                    src="/KaronyxXTcc.PNG"
-                    alt="Karonyx X TCC collaboration logo"
-                    width={250}
-                    height={100}
-                    className="h-24 w-auto"
-                    priority={true}
-                  />
-                </div>
+  <h2 className="text-3xl font-semibold tracking-tight text-gray-900">
+    Careers in{" "}
+    <span className="text-brand-accent">Law</span>
+  </h2>
+
+  <Link
+    href="https://www.linkedin.com/company/thekarnyxrecords/?viewAsMember=true"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Karonyx LinkedIn Page"
+  >
+    <Image
+      src="/KaronyxXTcc.PNG"
+      alt="Karonyx X TCC collaboration logo"
+      width={250}
+      height={100}
+      className="h-24 w-auto cursor-pointer hover:opacity-90 transition"
+      priority
+    />
+  </Link>
+</div>
 
                 <div className="mt-3 h-1 w-12 rounded-full bg-brand-accent/70" />
 

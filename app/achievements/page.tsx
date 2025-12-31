@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { getAchievements } from '../../lib/content';
 import AchievementsGrid from './AchievementsGrid';
-
+import Link from "next/link";
 export const metadata = { title: 'Achievements | TCC' };
 export const dynamic = 'force-dynamic';
 
@@ -35,17 +35,24 @@ export default async function AchievementsPage() {
 
       {/* Partnership Logo */}
       <section className="py-4 bg-white">
-        <div className="container max-w-2xl flex justify-center">
-          <Image
-            src="/Karonyx_CollabUpdated.jpeg"
-            alt="Karonyx X TCC Partnership"
-            width={300}
-            height={80}
-            priority
-            className="w-full max-w-xs md:max-w-sm h-auto rounded-lg shadow-md"
-          />
-        </div>
-      </section>
+  <div className="container max-w-2xl flex justify-center">
+    <Link
+      href="https://www.linkedin.com/company/thekarnyxrecords/?viewAsMember=true"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Karonyx LinkedIn Page"
+    >
+      <Image
+        src="/Karonyx_CollabUpdated.jpeg"
+        alt="Karonyx X TCC Partnership"
+        width={300}
+        height={80}
+        priority
+        className="w-full max-w-xs md:max-w-sm h-auto rounded-lg shadow-md cursor-pointer hover:opacity-90 transition"
+      />
+    </Link>
+  </div>
+</section>
 
       {/* Achievements Grid with Modal */}
       <AchievementsGrid 
