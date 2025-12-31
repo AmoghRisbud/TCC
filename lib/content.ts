@@ -56,14 +56,20 @@ export const getPrograms = async (): Promise<Program[]> => {
 };
 
 export const getResearch = async (): Promise<Research[]> => {
-  return getFromRedisOrMarkdown('tcc:research', 'research', (d, slug) => ({ slug, ...d }));
+  const research = await getFromRedisOrMarkdown('tcc:research', 'research', (d, slug) => ({ slug, ...d }));
+  
+  // Reverse to show newest items first (newly added items appear at top)
+  return research.reverse();
 };
 
 export const getTestimonials = async (): Promise<Testimonial[]> => {
-  return getFromRedisOrMarkdown('tcc:testimonials', 'testimonials', (d, slug) => ({
+  const testimonials = await getFromRedisOrMarkdown('tcc:testimonials', 'testimonials', (d, slug) => ({
     id: slug,
     ...d,
   }));
+  
+  // Reverse to show newest items first (newly added items appear at top)
+  return testimonials.reverse();
 };
 
 export const getGallery = async (): Promise<GalleryItem[]> => {
@@ -74,11 +80,14 @@ export const getGallery = async (): Promise<GalleryItem[]> => {
 export const getTeam = (): TeamMember[] => readMarkdownDir('team', (d, slug) => ({ slug, ...d }));
 
 export const getJobs = async (): Promise<Job[]> => {
-  return getFromRedisOrMarkdown('tcc:careers', 'jobs', (d, slug) => ({ slug, ...d }));
-};
-
-export const getAchievements = async (): Promise<Achievement[]> => {
-  return getFromRedisOrMarkdown('tcc:achievements', 'achievements', (d, slug) => ({ 
+  const jobs = await getFromRedisOrMarkdown('tcc:careers', 'jobs', (d, slug) => ({ slug, ...d }));
+  
+  // Sort by closingDate descending (newest first), items without dates go last
+  return jobs.sort((a, b) => {
+    const dateA = a.closingDate ? new Date(a.closingDate).getTime() : -Infinity;
+    const dateB = b.closingDate ? new Date(b.closingDate).getTime() : -Infinity;
+    rReverse to show newest items first (newly added items appear at top)
+  return jobs.reverse(eturn getFromRedisOrMarkdown('tcc:achievements', 'achievements', (d, slug) => ({ 
     id: slug, 
     slug, 
     ...d 

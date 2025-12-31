@@ -38,12 +38,23 @@ export default async function JobDetail({ params }: { params: { slug: string } }
         )}
       </div>
       <div className="mt-10">
-        <Link
-          href={`/careers?position=${encodeURIComponent(job.title)}#apply`}
-          className="btn"
-        >
-          Apply Now
-        </Link>
+        {job.applyUrl ? (
+          <a
+            href={job.applyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn"
+          >
+            Apply Now
+          </a>
+        ) : (
+          <Link
+            href={`/careers?position=${encodeURIComponent(job.title)}#apply`}
+            className="btn"
+          >
+            Apply Now
+          </Link>
+        )}
       </div>
     </div>
   );

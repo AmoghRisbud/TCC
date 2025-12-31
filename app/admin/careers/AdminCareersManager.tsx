@@ -25,6 +25,7 @@ const emptyJob: Job = {
   requirements: [],
   responsibilities: [],
   applyEmail: '',
+  applyUrl: '',
   closingDate: '',
   status: 'Open',
   salaryRange: ''
@@ -399,6 +400,30 @@ export default function AdminCareersManager() {
                       type="email"
                       value={formData.applyEmail || ''}
                       onChange={e => setFormData({ ...formData, applyEmail: e.target.value })}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">For CV submissions to your inbox</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">External Apply Link (optional)</label>
+                    <input
+                      type="url"
+                      value={formData.applyUrl || ''}
+                      onChange={e => setFormData({ ...formData, applyUrl: e.target.value })}
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
+                      placeholder="https://example.com/apply"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">If provided, "Apply Now" redirects here instead of the CV form</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Salary Range</label>
+                    <input
+                      type="text"
+                      value={formData.salaryRange || ''}
+                      onChange={e => setFormData({ ...formData, salaryRange: e.target.value })}
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary"
                     />
                   </div>
