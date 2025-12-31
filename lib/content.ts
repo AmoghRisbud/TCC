@@ -82,12 +82,12 @@ export const getTeam = (): TeamMember[] => readMarkdownDir('team', (d, slug) => 
 export const getJobs = async (): Promise<Job[]> => {
   const jobs = await getFromRedisOrMarkdown('tcc:careers', 'jobs', (d, slug) => ({ slug, ...d }));
   
-  // Sort by closingDate descending (newest first), items without dates go last
-  return jobs.sort((a, b) => {
-    const dateA = a.closingDate ? new Date(a.closingDate).getTime() : -Infinity;
-    const dateB = b.closingDate ? new Date(b.closingDate).getTime() : -Infinity;
-    rReverse to show newest items first (newly added items appear at top)
-  return jobs.reverse(eturn getFromRedisOrMarkdown('tcc:achievements', 'achievements', (d, slug) => ({ 
+  // Reverse to show newest items first (newly added items appear at top)
+  return jobs.reverse();
+};
+
+export const getAchievements = async (): Promise<Achievement[]> => {
+  return getFromRedisOrMarkdown('tcc:achievements', 'achievements', (d, slug) => ({ 
     id: slug, 
     slug, 
     ...d 
