@@ -83,7 +83,7 @@ const peopleGroups = [
       },
       {
         name: "Mr. Akhilesh Khadtare",
-        designation: "Co-Founder , Sales and Marketing",
+        designation: "Co-Founder & HOB",
         image: "/images/counsel/Akhilesh.JPG",
       },
       {
@@ -98,7 +98,7 @@ const peopleGroups = [
       },
       {
         name: "Mr. Shubham Vengurlekar",
-        designation: "Co-Founder , Tech",
+        designation: "Co-Founder & Internal Operations Associate",
         image: "/images/counsel/ShubhamV.JPG",
       },
       {
